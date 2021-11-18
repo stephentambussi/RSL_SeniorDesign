@@ -6,6 +6,12 @@
 #include "std_msgs/Int32.h"
 #include "std_msgs/Float32MultiArray.h"
 
+ros::Publisher p1; //publisher for id
+ros::Publisher p2; //publisher for position
+ros::Publisher p3; //publisher for tracking state - maybe change this to action state
+std_msgs::Int32 id;
+std_msgs::Float32MultiArray pos;
+std_msgs::Int32 state;
 /**
  * Subscriber callbacks. The argument of the callback is a constant pointer to the received message
  */
@@ -25,6 +31,20 @@ void objectListCallback(const zed_interfaces::ObjectsStamped::ConstPtr& msg)
                                           << msg->objects[i].position[2] << "] [m]"
                                           << "- Conf. " << msg->objects[i].confidence
                                           << " - Tracking state: " << static_cast<int>(msg->objects[i].tracking_state));
+    //add object confidence condition? (greater than 0.65)
+    //set msg data for publishing
+    id.data = msg->objects[i].label_id;
+    //clear pos array
+    pos.data.clear();
+    pos.data.push_back(msg->objects[i].position[0]);
+    pos.data.push_back(msg->objects[i].position[1]);
+    pos.data.push_back(msg->objects[i].position[2]);
+    state.data = static_cast<int>(msg->objects[i].tracking_state);
+
+    //publish msg data
+    p1.publish(id);
+    p2.publish(pos);
+    p3.publish(state);
   }
 }
 
@@ -64,8 +84,10 @@ int main(int argc, char** argv)
    * is the number of messages that will be buffered up before beginning to throw
    * away the oldest ones.
    */
+  p1 = n.advertise<std_msgs::Int32>("id", 10);
+  p2 = n.advertise<std_msgs::Float32MultiArray>("pos", 10);
+  p3 = n.advertise<std_msgs::Int32>("state", 10);
   ros::Subscriber subObjList = n.subscribe("objects", 10, objectListCallback);
-
   /**
    * ros::spin() will enter a loop, pumping callbacks.  With this version, all
    * callbacks will be called from within this thread (the main one).  ros::spin()
