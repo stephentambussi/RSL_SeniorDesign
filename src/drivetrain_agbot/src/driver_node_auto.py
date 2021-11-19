@@ -47,10 +47,7 @@ class Driver:
         self._left_speed_percent = 0
         self._right_speed_percent = 0
 
-        # Setup subscriber for id, pos, and state msg
-        #rospy.Subscriber('id', Int32, self.id_received_callback)
-        #rospy.Subscriber('pos', Float32MultiArray, self.floatarr_received_callback)
-        #rospy.Subscriber('state', Int32, self.state_received_callback)
+        #Setup subscriber to receive linear and angular
         rospy.Subscriber('zed_vel1', Float32MultiArray, self.vel_received_callback)
     def vel_received_callback(self, message):
         """Handle new float arr command message."""

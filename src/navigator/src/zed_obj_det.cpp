@@ -14,12 +14,30 @@ float xthreshold = 1.22; //in meters
 float ythreshold = 0.2; //in meters
 float linear = 0;
 float angular = 0;
+int tracking_id = 0;
+int init_tracking_flag = 0;
 
 /**
  * Subscriber callbacks. The argument of the callback is a constant pointer to the received message
  */
 void objectListCallback(const zed_interfaces::ObjectsStamped::ConstPtr& msg)
 {
+  int flag = 0;
+  float max_confid = 65;
+  int max_confid_id = 0;
+  if(init_tracking_flag == 0) //initialize object det with the person with highest confidence
+  {
+    for(int i = 0; i < msg->objects.size(); i++)
+    {
+      if(msg->objects[i].confidence > max_confid)
+      {
+        max_confid = msg->objects[i].confidence;
+        tracking_id = msg->objects[i].label_id;
+      }
+    }
+    init_tracking_flag = 1;
+    max_confid = 65;
+  }
   ROS_INFO("***** New object list *****");
   for (int i = 0; i < msg->objects.size(); i++)
   {
@@ -40,7 +58,12 @@ void objectListCallback(const zed_interfaces::ObjectsStamped::ConstPtr& msg)
     //calculate linear and angular vel to send to driver_node
     //TODO1: Code so that robot only follows single person at a time, even with multiple people in view
     //TODO2: Code so that robot matches velocity of person it is actively following
-    if(msg->objects[i].confidence > 65)
+    if(msg->objects[i].confidence > max_confid) //keep track of obj with highest confidence in case tracked obj not found
+    {
+      max_confid = msg->objects[i].confidence;
+      max_confid_id = msg->objects[i].label_id;
+    }
+    if(msg->objects[i].label_id == tracking_id && static_cast<int>(msg->objects[i].tracking_state) == 0) //if object is tracked one and actively being tracked
     {
       linang.data.clear();
       if(msg->objects[i].position[0] > xthreshold)
@@ -70,7 +93,13 @@ void objectListCallback(const zed_interfaces::ObjectsStamped::ConstPtr& msg)
       linang.data.push_back(angular);
   
       p.publish(linang); //send linear and angular velocities to driver_node
+      flag = 1;
+      break;
     }
+  }
+  if(flag == 0) //if tracked object not detected, set to next object
+  {
+    tracking_id = max_confid_id;
   }
 }
 
