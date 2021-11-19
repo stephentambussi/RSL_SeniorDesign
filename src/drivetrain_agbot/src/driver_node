@@ -57,7 +57,11 @@ class Driver:
 
         # Extract linear and angular velocities from the message
         linear = message.linear.x
+        print("linear:")
+        print(linear)
         angular = message.angular.z
+        print("angular:")
+        print(angular)
 
 #        print(linear)
 #        print(angular)

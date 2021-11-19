@@ -33,18 +33,21 @@ void objectListCallback(const zed_interfaces::ObjectsStamped::ConstPtr& msg)
                                           << " - Tracking state: " << static_cast<int>(msg->objects[i].tracking_state));
     //add object confidence condition? (greater than 0.65)
     //set msg data for publishing
-    id.data = msg->objects[i].label_id;
-    //clear pos array
-    pos.data.clear();
-    pos.data.push_back(msg->objects[i].position[0]);
-    pos.data.push_back(msg->objects[i].position[1]);
-    pos.data.push_back(msg->objects[i].position[2]);
-    state.data = static_cast<int>(msg->objects[i].tracking_state);
+    if(msg->objects[i].confidence > 65)
+    {    
+      id.data = msg->objects[i].label_id;
+      //clear pos array
+      pos.data.clear();
+      pos.data.push_back(msg->objects[i].position[0]);
+      pos.data.push_back(msg->objects[i].position[1]);
+      pos.data.push_back(msg->objects[i].position[2]);
+      state.data = static_cast<int>(msg->objects[i].tracking_state);
 
-    //publish msg data
-    p1.publish(id);
-    p2.publish(pos);
-    p3.publish(state);
+      //publish msg data
+      p1.publish(id);
+      p2.publish(pos);
+      p3.publish(state);
+    }
   }
 }
 

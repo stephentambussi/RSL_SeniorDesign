@@ -2,6 +2,6 @@
 
 
 <node name="driver_node_auto" pkg="drivetrain_agbot" type="driver_node_auto.py" output="screen" />
-<!-- <node name="roboteq_node" pkg="drivetrain_agbot" type="command_du_motors.py" /> -->
+<node name="roboteq_node" pkg="drivetrain_agbot" type="command_du_motors.py" />
 
 </launch>

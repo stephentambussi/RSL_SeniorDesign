@@ -8,6 +8,8 @@ from std_msgs.msg import Int32, Int64, Float32MultiArray
 _FREQUENCY = 20
 xthreshold = 1.22
 ythreshold = 0.2
+linear = 0
+angular = 0 
 
 def _clip(value, minimum, maximum):
     """Ensure value is between minimum and maximum."""
@@ -67,27 +69,27 @@ class Driver:
 
     def floatarr_received_callback(self, message):
         """Handle new float arr command message."""
-
+        #initalize values
         self._last_received = rospy.get_time()
         #print("Position: ")
         #print(message.data)
         #TODO: refine this code 
-        if id == 0 and state == 1: # Follow first person detected and if they are detected by zed
-            if message.data[0] > xthreshold: # x pos > 1.22 (meters)
-                linear = 0.1 # move
-            if message.data[0] <= xthreshold:
-                linear = 0 # stop moving
-            if abs(message.data[1]) > ythreshold:
-                if message.data[1] < 0:
-                    angular = -0.1 #turn robot right
-                else:
-                    angular = 0.1 #turn robot left
-            if abs(message.data[1]) <= ythreshold:
-                angular = 0 #stop turning
-
+        #if id == 0 and state == 1: # Follow first person detected and if they are detected by zed
+        if message.data[0] > xthreshold: # x pos > 1.22 (meters)
+            linear = 0.4 # move
+        if message.data[0] <= xthreshold:
+            linear = 0 # stop moving
+        if abs(message.data[1]) > ythreshold:
+            if message.data[1] < 0:
+                angular = -0.4 #turn robot right
+            else:
+                angular = 0.4 #turn robot left
+        if abs(message.data[1]) <= ythreshold:
+            angular = 0 #stop turning
+        print(linear)
+        print(angular)
 #        print(linear)
 #        print(angular)
-    # This gets executed at class defintion time
 	pub_du1 = rospy.Publisher('ch1', Int64, queue_size=10)
 	pub_du2 = rospy.Publisher('ch2', Int64, queue_size=10)
 	
