@@ -3,11 +3,10 @@
 import rospy
 import time
 
-from std_msgs.msg import Int32, Int64, Float32MultiArray
+from std_msgs.msg import Float32MultiArray
 
 _FREQUENCY = 20
-xthreshold = 1.22
-ythreshold = 0.2
+
 linear = 0
 angular = 0 
 
@@ -49,56 +48,25 @@ class Driver:
         self._right_speed_percent = 0
 
         # Setup subscriber for id, pos, and state msg
-        rospy.Subscriber('id', Int32, self.id_received_callback)
-        rospy.Subscriber('pos', Float32MultiArray, self.floatarr_received_callback)
-        rospy.Subscriber('state', Int32, self.state_received_callback)
-
-    def id_received_callback(self, message):
-        """Handle new int command message."""
-        id = message.data
-        #self._last_received = rospy.get_time()
-        #print("ID: ")
-        #print(message.data)
-
-    def state_received_callback(self, message):
-        """Handle new int command message."""
-        state = message.data
-        #self._last_received = rospy.get_time()
-        #print("State: ")
-        #print(message.data)
-
-    def floatarr_received_callback(self, message):
+        #rospy.Subscriber('id', Int32, self.id_received_callback)
+        #rospy.Subscriber('pos', Float32MultiArray, self.floatarr_received_callback)
+        #rospy.Subscriber('state', Int32, self.state_received_callback)
+        rospy.Subscriber('zed_vel1', Float32MultiArray, self.vel_received_callback)
+    def vel_received_callback(self, message):
         """Handle new float arr command message."""
-        #initalize values
         self._last_received = rospy.get_time()
-        #print("Position: ")
-        #print(message.data)
-        #TODO: refine this code 
-        #if id == 0 and state == 1: # Follow first person detected and if they are detected by zed
-        if message.data[0] > xthreshold: # x pos > 1.22 (meters)
-            linear = 0.4 # move
-        if message.data[0] <= xthreshold:
-            linear = 0 # stop moving
-        if abs(message.data[1]) > ythreshold:
-            if message.data[1] < 0:
-                angular = -0.4 #turn robot right
-            else:
-                angular = 0.4 #turn robot left
-        if abs(message.data[1]) <= ythreshold:
-            angular = 0 #stop turning
-        print(linear)
-        print(angular)
-#        print(linear)
-#        print(angular)
-	pub_du1 = rospy.Publisher('ch1', Int64, queue_size=10)
-	pub_du2 = rospy.Publisher('ch2', Int64, queue_size=10)
-	
-	send_du_1 = 50*linear - 40*angular
-	send_du_2 = 50*linear + 40*angular
+        linear = message.data[0]
+        angular = message.data[1]
 
-	pub_du1.publish(send_du_1)
-	pub_du2.publish(send_du_2)
-	
+        pub_du1 = rospy.Publisher('ch1', Int64, queue_size=10)
+        pub_du2 = rospy.Publisher('ch2', Int64, queue_size=10)
+
+        send_du_1 = 50*linear - 40*angular
+        send_du_2 = 50*linear + 40*angular
+
+        pub_du1.publish(send_du_1)
+        pub_du2.publish(send_du_2)
+
         # Calculate wheel speeds in m/s
         left_speed = linear - angular*self._wheel_base/2
         right_speed = linear + angular*self._wheel_base/2
@@ -109,15 +77,14 @@ class Driver:
         # wheel speed sensors. Instead, we'll simply convert m/s
         # into percent of maximum wheel speed, which gives us a
         # duty cycle that we can apply to each motor.
-        self._left_speed_percent = (
-            100 * left_speed/self._max_speed)
-        self._right_speed_percent = (
-            100 * right_speed/self._max_speed)
 
+        self._left_speed_percent = (
+        100 * left_speed/self._max_speed)
+        self._right_speed_percent = (
+        100 * right_speed/self._max_speed)
     def run(self):
         """The control loop of the driver."""
-
-	rate = rospy.Rate(self._rate)
+        rate = rospy.Rate(self._rate)
 
         while not rospy.is_shutdown():
             #TODO: do something with id and state - only move if same id and state is tracking
