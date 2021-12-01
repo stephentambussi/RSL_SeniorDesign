@@ -1,6 +1,8 @@
 #include <ros/ros.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <chrono>
 
 #include <zed_interfaces/Object.h>
 #include <zed_interfaces/ObjectsStamped.h>
@@ -16,6 +18,9 @@ float linear = 0;
 float angular = 0;
 int tracking_id = 0;
 int init_tracking_flag = 0;
+int timer_called_flag = 0;
+auto start = std::chrono::high_resolution_clock::now(); //timer check
+auto finish = std::chrono::high_resolution_clock::now();
 
 /**
  * Subscriber callbacks. The argument of the callback is a constant pointer to the received message
@@ -98,9 +103,23 @@ void objectListCallback(const zed_interfaces::ObjectsStamped::ConstPtr& msg)
       break;
     }
   }
-  if(flag == 0) //if tracked object not detected, set to next object
+  if(flag == 0) //if tracked object not detected, start change object timer
   {
-    tracking_id = max_confid_id;
+    if(timer_called_flag == 0)
+    {
+      //start timer countdown -- call function
+      start = std::chrono::high_resolution_clock::now();
+      timer_called_flag = 1;
+    }
+    else if(timer_called_flag == 1){
+      finish = std::chrono::high_resolution_clock::now();
+      auto microseconds = std::chrono::duration_cast<std::chrono::microseconds>(finish-start);
+      if(microseconds >= std::chrono::seconds(3))
+      {
+        timer_called_flag = 0;
+        tracking_id = max_confid_id; //change to new object
+      }
+    }
   }
 }
 
