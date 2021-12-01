@@ -105,13 +105,17 @@ void objectListCallback(const zed_interfaces::ObjectsStamped::ConstPtr& msg)
   }
   if(flag == 0) //if tracked object not detected, start change object timer
   {
+    linang.data.clear();
+    linang.data.push_back(0); //stop robot when it loses tracked object
+    linang.data.push_back(0);
+    p.publish(linang); //send linear and angular velocities to driver_node
     if(timer_called_flag == 0)
     {
       //start timer countdown -- call function
       start = std::chrono::high_resolution_clock::now();
       timer_called_flag = 1;
     }
-    else if(timer_called_flag == 1){
+    else if(timer_called_flag == 1){ //when object is still undetected
       finish = std::chrono::high_resolution_clock::now();
       auto microseconds = std::chrono::duration_cast<std::chrono::microseconds>(finish-start);
       if(microseconds >= std::chrono::seconds(3))
