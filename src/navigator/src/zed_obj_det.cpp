@@ -63,9 +63,10 @@ void objectListCallback(const zed_interfaces::ObjectsStamped::ConstPtr& msg)
       max_confid = msg->objects[i].confidence;
       max_confid_id = msg->objects[i].label_id;
     }
-    if(msg->objects[i].label_id == tracking_id && static_cast<int>(msg->objects[i].tracking_state) == 0) //if object is tracked one and actively being tracked
+    if(msg->objects[i].label_id == tracking_id && static_cast<int>(msg->objects[i].tracking_state) == 1) //if object is tracked one and actively being tracked
     {
       linang.data.clear();
+      ROS_INFO_STREAM("Tracking ID: " << tracking_id);
       if(msg->objects[i].position[0] > xthreshold)
       {
         linear = 0.4; //move

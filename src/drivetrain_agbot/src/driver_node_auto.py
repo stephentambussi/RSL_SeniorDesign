@@ -3,7 +3,7 @@
 import rospy
 import time
 
-from std_msgs.msg import Float32MultiArray
+from std_msgs.msg import Float32MultiArray, Int64
 
 _FREQUENCY = 20
 
