@@ -58,8 +58,8 @@ class Driver:
         pub_du1 = rospy.Publisher('ch1', Int64, queue_size=10)
         pub_du2 = rospy.Publisher('ch2', Int64, queue_size=10)
 
-        send_du_1 = 50*linear - 40*angular
-        send_du_2 = 50*linear + 40*angular
+        send_du_1 = 50*linear + 40*angular
+        send_du_2 = 50*linear - 40*angular
 
         pub_du1.publish(send_du_1)
         pub_du2.publish(send_du_2)
