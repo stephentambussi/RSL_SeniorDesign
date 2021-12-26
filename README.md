@@ -11,3 +11,7 @@ Team Members and Major:
 - Dylan Hoover - COEN
 - Tanner Kaczmarek - COEN
 - Kevin Molumphy - COEN
+
+First Quarter Demo of "Follow the Leader" Mode
+
+![followtheleader](assets/cobot_followtheleader.gif)
