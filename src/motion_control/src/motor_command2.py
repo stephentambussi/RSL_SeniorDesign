@@ -21,16 +21,12 @@ timeout=1
 def DriveUnit_2(val):
 	
 	#print("Motor 1", val[0],"Motor 2", val[1],"Motor 3", val[2],"Motor 4", val[3])
-        #payload1 = "!G 1 " + str(round(val[0])) + "_"
-        #payload2 = "!G 2 " + str(round(val[1])) + "_"
 
 	payload3 = "!G 1 " + str(val[2]) + "_"
         payload4 = "!G 2 " + str(val[3]) + "_"  # change this to test
-       
-        #ser_drive_unit_1.write(payload1)
-        #ser_drive_unit_1.write(payload2)
-	ser_drive_unit_2.write(payload4)
+
 	ser_drive_unit_2.write(payload3)
+	ser_drive_unit_2.write(payload4)
 
 value_received = 0
 
@@ -38,8 +34,6 @@ def callback(data):
 #	rospy.loginfo(data.data)
 	value_received = data.data
 #	print(value_received)
-
-	#DriveUnit_1(value_received)
 	DriveUnit_2(value_received)
 
 
