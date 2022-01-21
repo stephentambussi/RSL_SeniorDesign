@@ -84,11 +84,11 @@ void objectListCallback(const zed_interfaces::ObjectsStamped::ConstPtr& msg)
       {
         if(msg->objects[i].position[1] < 0)
         {
-          angular = -0.4; //turn robot right
+          angular = -0.4; //turn robot left
         }
         else
         {
-          angular = 0.4; //turn robot left
+          angular = 0.4; //turn robot right
         }
       }
       if(abs(msg->objects[i].position[1]) <= ythreshold)
