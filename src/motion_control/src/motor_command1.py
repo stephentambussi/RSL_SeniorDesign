@@ -8,7 +8,7 @@ import serial
 
 
 ser_drive_unit_1 = serial.Serial(
-port='/dev/serial/by-path/platform-3610000.xhci-usb-0:2.3:1.0',
+port='/dev/serial/by-path/platform-3610000.xhci-usb-0:2.3:1.0-port0',
 baudrate=115200,
 parity=serial.PARITY_NONE,
 stopbits=serial.STOPBITS_ONE,
