@@ -126,6 +126,7 @@ void objectListCallback(const zed_interfaces::ObjectsStamped::ConstPtr& msg)
     linang.data.clear();
     linang.data.push_back(0); //stop robot when it loses tracked object
     linang.data.push_back(0);
+    linang.data.push_back(0);
     p.publish(linang); //send linear and angular velocities to driver_node
     if(timer_called_flag == 0)
     {
