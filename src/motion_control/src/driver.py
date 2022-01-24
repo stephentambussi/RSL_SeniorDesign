@@ -18,6 +18,7 @@ def callback(Twist):
     motors = Int16MultiArray()
     pi = 3.14;
     velocities = np.array([[Twist.linear.x], [Twist.linear.y], [Twist.angular.z]]) # taken from joystick in m/s
+    print(velocities)
     #----------defining wheel rotations based on velocites recieved for holonomic motion-------#
     
     # declaring robot wheel radius and distances of the wheels along x and y as l1 and l2
@@ -32,7 +33,7 @@ def callback(Twist):
     RPMs = (60.0/(2*pi))*Angular_velocities 
     
     motors.data = [round(RPMs[0]),round(RPMs[1]),round(RPMs[2]),round(RPMs[3])]
-    print(motors.data)
+    #print(motors.data)
     global pub
     pub.publish(motors)
 

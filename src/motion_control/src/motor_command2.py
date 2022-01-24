@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 import rospy
-from std_msgs.msg import Int16MultiArray  ### By Dhaval Patel
+from std_msgs.msg import Int16MultiArray  # By Dhaval Patel
 
 import rospy
 import time
 import serial
-
 
 
 ser_drive_unit_2 = serial.Serial(
@@ -17,18 +16,18 @@ bytesize=serial.EIGHTBITS,
 timeout=1
 )
 
+value_received = 0
+
 
 def DriveUnit_2(val):
-	
-	#print("Motor 1", val[0],"Motor 2", val[1],"Motor 3", val[2],"Motor 4", val[3])
+
+	# print("Motor 1", val[0],"Motor 2", val[1],"Motor 3", val[2],"Motor 4", val[3])
 
 	payload3 = "!G 1 " + str(val[2]) + "_"
-        payload4 = "!G 2 " + str(val[3]) + "_"  # change this to test
+	payload4 = "!G 2 " + str(val[3]) + "_"  # change this to test
 
 	ser_drive_unit_2.write(payload3)
 	ser_drive_unit_2.write(payload4)
-
-value_received = 0
 
 def callback(data):
 #	rospy.loginfo(data.data)

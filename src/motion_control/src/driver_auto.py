@@ -15,8 +15,8 @@ def callback(message):
     #arr = np.array([Twist.linear.x, Twist.linear.y, Twist.angular.z])
     
     pi = 3.14;
-	#Figure out velocity ((linear.x), (linear.y), (angular.z))
-    velocities = np.array([[message.data[0]], [message.data[0]], [message.data[1]]]) # in m/s 
+	#((linear.x), (linear.y), (angular.z))
+    velocities = np.array([[message.data[0]], [message.data[1]], [message.data[2]]]) # in m/s 
     #----------defining wheel rotations based on velocites recieved for holonomic motion-------#
     
     # declaring robot wheel radius and distances of the wheels along x and y as l1 and l2
