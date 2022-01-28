@@ -12,10 +12,12 @@
 ros::Publisher p; //publisher for linang array
 std_msgs::Float32MultiArray linang;
 
-float xthreshold = 1.22; //in meters
-float ythreshold = 0.2; //in meters
-float linear = 0;
-float angular = 0;
+float move_xthreshold = 1.22; //in meters - for robot to move forward
+float rotate_xthreshold = 0.5; //in meters - for robot to rotate inside of strafe
+float linear_ythreshold = 0.2; //in meters - for robot to strafe or rotate
+float linear_x = 0;
+float linear_y = 0;
+float angular_z = 0;
 int tracking_id = 0;
 int init_tracking_flag = 0;
 int timer_called_flag = 0;
@@ -62,7 +64,7 @@ void objectListCallback(const zed_interfaces::ObjectsStamped::ConstPtr& msg)
 
     //calculate linear and angular vel to send to driver_node
     //TODO1: Code so that robot only follows single person at a time, even with multiple people in view
-    //TODO2: Code so that robot matches velocity of person it is actively following
+    //TODO2: Code so that robot matches velocity of person it is actively following (including angular)
     if(msg->objects[i].confidence > max_confid) //keep track of obj with highest confidence in case tracked obj not found
     {
       max_confid = msg->objects[i].confidence;
@@ -72,31 +74,47 @@ void objectListCallback(const zed_interfaces::ObjectsStamped::ConstPtr& msg)
     {
       linang.data.clear();
       ROS_INFO_STREAM("Tracking ID: " << tracking_id);
-      if(msg->objects[i].position[0] > xthreshold)
+      if(msg->objects[i].position[0] > move_xthreshold)
       {
-        linear = 0.4; //move
+        linear_x = 0.4; //move forward in x direction
       }
-      if(msg->objects[i].position[0] <= xthreshold)
+      if(msg->objects[i].position[0] <= move_xthreshold)
       {
-        linear = 0; //stop moving
+        linear_x = 0; //stop moving
       }
-      if(abs(msg->objects[i].position[1]) > ythreshold)
+      if(abs(msg->objects[i].position[1]) > linear_ythreshold)
       {
-        if(msg->objects[i].position[1] < 0)
+        if(msg->objects[i].position[0] <= rotate_xthreshold) //rotate
         {
-          angular = 0.4; //turn robot right
+          if(msg->objects[i].position[1] < 0)
+          {
+            angular_z = -0.3; //rotate robot right
+          }
+          else
+          {
+            angular_z = 0.3; //rotate robot left
+          }
         }
-        else
+        else //strafe
         {
-          angular = -0.4; //turn robot left
-        }
+          if(msg->objects[i].position[1] < 0)
+          {
+            linear_y = -0.3; //strafe robot right
+          }
+          else
+          {
+            linear_y = 0.3; //strafe robot left
+          }
+        } 
       }
-      if(abs(msg->objects[i].position[1]) <= ythreshold)
+      if(abs(msg->objects[i].position[1]) <= linear_ythreshold)
       {
-        angular = 0; //stop turning
+        angular_z = 0; //stop rotating
+        linear_y = 0; //stop strafing
       }
-      linang.data.push_back(linear);
-      linang.data.push_back(angular);
+      linang.data.push_back(linear_x);
+      linang.data.push_back(linear_y);
+      linang.data.push_back(angular_z);
   
       p.publish(linang); //send linear and angular velocities to driver_node
       flag = 1;
@@ -107,6 +125,7 @@ void objectListCallback(const zed_interfaces::ObjectsStamped::ConstPtr& msg)
   {
     linang.data.clear();
     linang.data.push_back(0); //stop robot when it loses tracked object
+    linang.data.push_back(0);
     linang.data.push_back(0);
     p.publish(linang); //send linear and angular velocities to driver_node
     if(timer_called_flag == 0)
