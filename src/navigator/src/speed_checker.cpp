@@ -4,6 +4,9 @@
 #include <sensor_msgs/FluidPressure.h>
 #include <sensor_msgs/Temperature.h>
 
+//TODO: Calculate velocity from acceleration
+//TODO: put a limit on the robots speed (max speed is 5mph)
+
 /**
  * Subscriber callbacks
  */

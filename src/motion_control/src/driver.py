@@ -2,7 +2,7 @@
 # license removed for brevity
 
 import rospy
-from std_msgs.msg import Int16MultiArray
+from std_msgs.msg import Int16MultiArray, String
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import Joy
 import numpy as np
@@ -18,7 +18,7 @@ def callback(Twist):
     motors = Int16MultiArray()
     pi = 3.14;
     velocities = np.array([[Twist.linear.x], [Twist.linear.y], [Twist.angular.z]]) # taken from joystick in m/s
-    print(velocities)
+    #print(velocities)
     #----------defining wheel rotations based on velocites recieved for holonomic motion-------#
     
     # declaring robot wheel radius and distances of the wheels along x and y as l1 and l2
@@ -37,6 +37,9 @@ def callback(Twist):
     global pub
     pub.publish(motors)
 
+def temp_callback(String):
+    print(String.data)
+
 ##    
 
 
@@ -48,6 +51,7 @@ def start():
                 # subscribed to joystick inputs on topic "joy"
     rospy.Subscriber("cmd_vel", Twist, callback)
                 # starts the node
+    rospy.Subscriber("read", String, temp_callback)
     
     rospy.spin()
 
