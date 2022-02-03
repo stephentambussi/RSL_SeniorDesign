@@ -1,10 +1,8 @@
 #include <ros/ros.h>
 #include <sensor_msgs/Imu.h>
-#include <sensor_msgs/MagneticField.h>
-#include <sensor_msgs/FluidPressure.h>
-#include <sensor_msgs/Temperature.h>
 
 //TODO: Calculate velocity from acceleration
+//TODO: Figure out how to filter values via covariance matrix (if it is not being done already)
 //TODO: put a limit on the robots speed (max speed is 5mph)
 
 /**
