@@ -1,5 +1,4 @@
 <launch>
 
   <node pkg="navigator" name="object_det" type="obj_det_node" args="objects:=/zed2i/zed_node/obj_det/objects"/>
-  <node pkg="navigator" name="speed_checker" type="speed_checker" output="screen" />
 </launch>
