@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <chrono>
 
+/* This code was tabled */
 ros::Publisher s; //publisher for linang correction array
 std_msgs::Float32MultiArray correct_linang;
 
@@ -85,7 +86,7 @@ class SpeedCheck
                 correct_linang.data.push_back(correct_liny);
                 correct_linang.data.push_back(correct_angz);
 
-                p.publish(correct_linang);
+                s.publish(correct_linang);
             }
         }
 };
@@ -98,8 +99,8 @@ int main(int argc, char** argv) {
     ros::init(argc, argv, "zed_sensors_subscriber");
     ros::NodeHandle n;
 
-    ros::Subscriber subImu = n.subscribe("/zed2i/zed_node/imu/data", 10, &SpeedCheck::imuCallback, &checker);
-    s = n.advertise<std_msgs::Float32MultiArray>("linang_correction", 10);
+    //ros::Subscriber subImu = n.subscribe("/zed2i/zed_node/imu/data", 10, &SpeedCheck::imuCallback, &checker);
+    //s = n.advertise<std_msgs::Float32MultiArray>("linang_correction", 10);
 
     while(true)
     {
