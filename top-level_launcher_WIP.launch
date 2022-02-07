@@ -1,5 +1,5 @@
 <!-- Prototype Top-level launch file -->
-<!-- This top-level launch file will launch all the other launch files -->
+<!-- This top-level launch file will launch all the other launch files -- tester -->
 <!-- Cmdline Syntax: roslaunch <launch-file-path> [args] -->
 <!-- Example Syntax: roslaunch top-level_launcher.launch select_man:=1 -->
 <launch>
