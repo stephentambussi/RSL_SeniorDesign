@@ -7,6 +7,7 @@ export default function ModeSelect() {
       <header>Mode selector</header>
       <Button>Manual mode</Button>
       <Button>Follow mode</Button>
+      <Button>AutoNav</Button>
     </Container>
   );
 }

@@ -1,14 +1,13 @@
 // import { Route, Routes } from "react-router-dom";
 import MainNav from "./Components/layout/MainNav";
-
+import { Box } from "@mui/system";
 import Homepage from "./Pages/Homepage";
 
 function App() {
   return (
-    <div className="App">
-      <MainNav />
+    <Box>
       <Homepage />
-    </div>
+    </Box>
   );
 }
 
