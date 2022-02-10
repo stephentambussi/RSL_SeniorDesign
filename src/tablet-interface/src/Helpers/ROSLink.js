@@ -1,3 +1,5 @@
+var ROSLIB = require('roslib')
+
 var ros = new ROSLIB.ros({
     url: 'ws://localhost:9090'
 })
@@ -14,3 +16,24 @@ ros.on('close', function(){
     console.log('Connection to websocket server closed')
 })
 
+var cmdVel = new ROSLIB.Topic({
+    ros: ros,
+    name: '/cmd_vel',
+    messageType: 'geometry_msgs/Twists'
+});
+
+var twist = new ROSLIB.Message({
+    linear: {
+        x : 0.1,
+        y : 0.2,
+        z : 0.3
+    },
+    angular: {
+        x : -0.1,
+        y : -0.2,
+        z : -0.3
+    }
+});
+
+console.log("Publishing cmd_vel")
+cmdVel.publish(twist)
