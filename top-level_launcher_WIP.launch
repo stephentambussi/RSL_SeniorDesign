@@ -2,7 +2,6 @@
 <!-- This top-level launch file will launch all the other launch files -->
 <!-- Cmdline Syntax: roslaunch <launch-file-path> [args] -->
 <!-- Example Syntax: roslaunch top-level_launcher.launch select_man:=1 -->
-<!-- TODO: Make sure this works -->
 <launch>
 
     <!-- Arguments for mode selection: value set by command line args, default is 0 (so nothing executes) -->

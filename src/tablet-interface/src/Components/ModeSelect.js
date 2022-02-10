@@ -19,6 +19,7 @@ const handleOnClick = () => {
       <header>Mode selector</header>
       <Button onClick={handleOnClick}>Manual mode</Button>
       <Button>Follow mode</Button>
+      <Button>AutoNav</Button>
     </Container>
   );
 }
