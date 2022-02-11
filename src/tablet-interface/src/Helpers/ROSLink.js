@@ -37,3 +37,8 @@ var twist = new ROSLIB.Message({
 
 console.log("Publishing cmd_vel")
 cmdVel.publish(twist)
+
+export const publishTwishMessage = () => {
+    console.log("publishing cmd_vel")
+    cmdVel.publish(twist)
+}

@@ -1,25 +1,22 @@
 import React from "react";
 import { Container, Button } from "@mui/material";
+import { publishTwishMessage } from "../Helpers/ROSLink";
 
 
 
-export default function ModeSelect() {
+export default function ModeSelect({modeSelectionCallback}) {
 
-
-
-const handleOnClick = () => {
-  console.log("Publishing cmd_vel")
-}
-
-
+  const handleSelectionClick = (selection) => {
+    modeSelectionCallback(selection)
+  }
 
 
   return (
     <Container>
       <header>Mode selector</header>
-      <Button onClick={handleOnClick}>Manual mode</Button>
+      <Button onClick={handleSelectionClick("manualControl")}>Manual mode</Button>
       <Button>Follow mode</Button>
-      <Button>AutoNav</Button>
+      <Button onClick={handleSelectionClick("autonav")}>AutoNav</Button>
     </Container>
   );
 }

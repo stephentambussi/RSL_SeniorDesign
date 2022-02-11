@@ -4,11 +4,23 @@ import { Box } from "@mui/system";
 import AutoNav from "../Components/AutoNav";
 import MainNav from "../Components/layout/MainNav";
 import ModeSelect from "../Components/ModeSelect";
-import ManualControl from "../Components/ManualControl";
+import ControlArea from "../Components/ControlArea";
 
 export default function Homepage() {
 
+  const [displayedComponent, setDisplayedComponent] = useState("mainNav");
 
+  const handleSelectionClick = (selection) => {
+    console.log("Mode selection clicked: " + selection)
+    switch(selection) {
+      case "autoNav":
+        setDisplayedComponent("autoNav");
+        break;
+      case "manualControl":
+        setDisplayedComponent("manualControl");
+        break;
+    }
+  }
   return (
     <Box
       sx={{
@@ -31,7 +43,7 @@ export default function Homepage() {
             justifyItems: "center",
           }}
         >
-          <ModeSelect />
+          <ModeSelect modeSelectionCallback={handleSelectionClick}/>
         </Box>
         <Box
           sx={{
@@ -40,7 +52,7 @@ export default function Homepage() {
             justifyItems: "center",
           }}
         >
-          {displayedComponent}
+          <ControlArea displayedComponentType={displayedComponent}/>
 
         </Box>
       </Box>
