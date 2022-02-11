@@ -1,13 +1,15 @@
 // import { Route, Routes } from "react-router-dom";
-import MainNav from "./Components/layout/MainNav";
 import { Box } from "@mui/system";
 import Homepage from "./Pages/Homepage";
+import { Route, Router } from "react-router-dom";
 
 function App() {
   return (
-    <Box>
-      <Homepage />
-    </Box>
+    <Router>
+      <div>
+        <Route path="/" component={Homepage} />
+      </div>
+    </Router>
   );
 }
 

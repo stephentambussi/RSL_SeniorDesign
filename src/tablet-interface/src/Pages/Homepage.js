@@ -1,7 +1,6 @@
 import React from "react";
 import { useState } from "react";
 import { Box } from "@mui/system";
-import AutoNav from "../Components/AutoNav";
 import MainNav from "../Components/layout/MainNav";
 import ModeSelect from "../Components/ModeSelect";
 import ControlArea from "../Components/ControlArea";
