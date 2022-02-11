@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <chrono>
 
+/* This code was tabled */
 ros::Publisher s; //publisher for linang correction array
 std_msgs::Float32MultiArray correct_linang;
 
