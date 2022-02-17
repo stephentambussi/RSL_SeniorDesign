@@ -16,7 +16,7 @@
     <!-- Launch Follow Me mode -->
     <group if="$(arg select_follow)">
         <include file="$(find motion_control)/launch/auto_control.launch" />
-        <include file="$(find navigator)/launch/object_detection.launch" />
+        <include file="$(find navigator)/launch/follow_me.launch" />
         <include file="$(find zed_wrapper)/launch/zed2i.launch" />
     </group>
 

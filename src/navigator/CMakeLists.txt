@@ -129,15 +129,16 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-add_executable(obj_det_node src/zed_obj_det.cpp)
+add_executable(follow_me_node src/follow_me_mode.cpp)
 add_executable(coll_avoid_node src/collisionNav.cpp)
 #add_executable(speed_checker src/speed_checker.cpp)
-target_link_libraries(obj_det_node ${catkin_LIBRARIES})
+target_link_libraries(follow_me_node ${catkin_LIBRARIES})
 target_link_libraries(coll_avoid_node ${catkin_LIBRARIES})
 #target_link_libraries(speed_checker ${catkin_LIBRARIES})
-add_dependencies(obj_det_node ${catkin_EXPORTED_TARGETS})
+add_dependencies(follow_me_node ${catkin_EXPORTED_TARGETS})
 add_dependencies(coll_avoid_node ${catkin_EXPORTED_TARGETS})
 #add_dependencies(speed_checker ${catkin_EXPORTED_TARGETS})
+
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
