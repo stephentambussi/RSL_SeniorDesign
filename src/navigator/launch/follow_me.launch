@@ -1,0 +1,4 @@
+<launch>
+
+  <node pkg="navigator" name="follow_me" type="follow_me_node" args="objects:=/zed2i/zed_node/obj_det/objects"/>
+</launch>
