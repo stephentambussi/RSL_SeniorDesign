@@ -15,13 +15,16 @@ ros::Publisher p; //publisher for linang array
 std_msgs::Float32MultiArray linang;
 
 void movements(float degree, float distance){
-    float objectYPlane = distance*sin(degree);
-    if(abs(objectYPlane) < minimalSafeY && distance < 1){
-        if(objectYPlane < 0){  //on the left side
-            ROS_INFO("On the left side and in collision range of distance %f and degree %f", distance,degree);
-        }
-        if(objectYPlane > 0){
-            ROS_INFO("On the right side and in collision range of distance %f and degree %f", distance,degree);
+    degree = 180 - degree;
+    if(degree > 270  || degree < 90){
+        float objectYPlane = distance*sin(degree);
+        if(abs(objectYPlane) < minimalSafeY && distance < 1.5){
+            if(degree > 270){  //on the left side
+                ROS_INFO("On the left side and in collision range of distance %f and degree %f", distance,degree);
+            }
+            if(degree < 90){
+                ROS_INFO("On the right side and in collision range of distance %f and degree %f", distance,degree);
+            }
         }
     }
 }
