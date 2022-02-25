@@ -1,24 +1,26 @@
-import { Card } from '@mui/material'
-import { useEffect } from 'react';
-import { useSelector } from 'react-redux'
-import { useState } from 'react';
-import AutoNav from './AutoNav';
-import ManualControl from './ManualControl';
+import { Card } from "@mui/material";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useState } from "react";
+import AutoNav from "./AutoNav";
+import ManualControl from "./ManualControl";
 
-export default function ControlArea({displayedComponentType}) {
-  const controlAreaPaneType = useSelector(state => state.app.controlAreaDefaultPaneType);
-  const [displayedComponent, setDisplayedComponet] = useState(displayedComponentDict[controlAreaPaneType]);
+export default function ControlArea({ displayedComponentType }) {
+  const displayedComponentDict = {
+    "autoNav": <AutoNav />,
+    "manualControl": <ManualControl />,
+  };
+  const controlAreaPaneType = "controlAreaPane";
+  const [displayedComponent, setDisplayedComponet] = useState(
+    displayedComponentDict[controlAreaPaneType]
+  );
   const [isAutoNavActive, setIsAutoNavActive] = useState(true);
   const [isManualControlActive, setIsManualControlActive] = useState(false);
 
-  const displayedComponentDict ={
-    "autoNav":<AutoNav/>,
-    "manualControl":<ManualControl/>
-  }
-
   const changeDisplayedComponent = (displayedComponentType) => {
-    setDisplayedComponet(displayedComponentDict[displayedComponentType])
-    switch(displayedComponentType) {
+      debugger
+    setDisplayedComponet(displayedComponentDict[displayedComponentType]);
+    switch (displayedComponentType) {
       case "autoNav":
         setIsAutoNavActive(true);
         setIsManualControlActive(false);
@@ -28,21 +30,20 @@ export default function ControlArea({displayedComponentType}) {
         setIsManualControlActive(true);
         break;
       default:
-        break
+        break;
     }
-  }
+  };
 
   useEffect(() => {
-     console.log(displayedComponentType)
-     changeDisplayedComponent(displayedComponentType)
-  },[displayedComponentType])
-
+    console.log(displayedComponentType);
+    changeDisplayedComponent(displayedComponentType);
+  }, [displayedComponentType]);
 
   return (
     <Card>
       {displayedComponent}
-      {isAutoNavActive === true ? <AutoNav/> : null}
-      {isManualControlActive === true ? <ManualControl/> : null}
+      {isAutoNavActive === true ? <AutoNav /> : null}
+      {isManualControlActive === true ? <ManualControl /> : null}
     </Card>
-  )
+  );
 }
