@@ -11,11 +11,33 @@
 
 float minimalSafeY=.4572;  //18 inches in meters 
 float minmialSafeX = 0.4572;
+float maxDistance = .25;
 
 ros::Publisher p; //publisher for linang array
 std_msgs::Float32MultiArray linang;
 
+float objectVector [2]; //index 0 is x, index 1 is y
+
 void movements(float degree, float distance){
+    objectVector[0] = 0;
+    objectVector[1] = 0;
+
+    if(distance < .25){
+        if(degree < -100 || degree > 100){
+            float objectYPlane = distance*sin(degree-180);
+            if(abs(objectYPlane) < minimalSafeY){
+                if(degree < -100)
+                    objectVector[1] = (1/distance);
+                else
+                    objectVector[1] = -(1/distance);
+                objectVector[0] = -(1/distance);
+                ROS_INFO("Distance: %f \t Degree: %f \t xVector,yVector %f, %f", distance, degree, objectVector[0], objectVector[1]);
+           }
+
+        }
+    }
+
+    /*
     degree = 180 - degree;
     float objectYPlane = 0;
     float objectXPlane = 0;
@@ -33,7 +55,7 @@ void movements(float degree, float distance){
         if(abs(objectYPlane) < minimalSafeY && distance < 1.5){
             if(degree > 270){  //on the left side
                 ROS_INFO("On the left side and in collision range of distance %f and degree %f", distance,degree);
-                ROS_INFO("X distance from object: %f", objectXPlane);
+                //ROS_INFO("X distance from object: %f", objectXPlane);
             }
             if(degree < 90){
                 ROS_INFO("On the right side and in collision range of distance %f and degree %f", distance,degree);
@@ -41,6 +63,7 @@ void movements(float degree, float distance){
             }
         }
     }
+    */
 }
 
 void scanCallback(const sensor_msgs::LaserScan::ConstPtr& scan)
