@@ -10,20 +10,34 @@
 #define RAD2DEG(x) ((x)*180./M_PI)
 
 float minimalSafeY=.4572;  //18 inches in meters 
+float minmialSafeX = 0.4572;
 
 ros::Publisher p; //publisher for linang array
 std_msgs::Float32MultiArray linang;
 
 void movements(float degree, float distance){
     degree = 180 - degree;
+    float objectYPlane = 0;
+    float objectXPlane = 0;
+    if(degree == 0)
+    {
+        //objectYPlane = 0, only objectXPlane
+        objectYPlane = distance*sin(degree);
+        objectXPlane = distance*cos(degree);
+        //ROS_INFO("X distance from object: %f", objectXPlane);
+
+    }
     if(degree > 270  || degree < 90){
-        float objectYPlane = distance*sin(degree);
+        objectYPlane = distance*sin(degree);
+        objectXPlane = distance*cos(degree);
         if(abs(objectYPlane) < minimalSafeY && distance < 1.5){
             if(degree > 270){  //on the left side
                 ROS_INFO("On the left side and in collision range of distance %f and degree %f", distance,degree);
+                ROS_INFO("X distance from object: %f", objectXPlane);
             }
             if(degree < 90){
                 ROS_INFO("On the right side and in collision range of distance %f and degree %f", distance,degree);
+                 ROS_INFO("X distance from object: %f", objectXPlane);
             }
         }
     }
