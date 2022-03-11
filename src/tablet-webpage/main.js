@@ -6,6 +6,8 @@ var app = new Vue({
     ros: null,
     ws_address: "",
     logs: [],
+    topic: null,
+    message: null
   },
   // helper methods to connect to ROS
   methods: {
@@ -32,6 +34,53 @@ var app = new Vue({
     },
     disconnect: function () {
         this.ros.close();
+    },
+    setTopic: function(){
+        this.topic = new ROSLIB.Topic({
+          ros: this.ros,
+          name: '/cmd_vel',
+          messageType: 'geometry_msgs/Twist'
+        })
+    },
+    forward: function(){
+        this.message = new ROSLIB.Message({
+          linear: { x: 1, y: 0, z: 0 },
+          angular: { x: 0, y: 0, z: 0},
+        })
+        this.setTopic()
+        this.topic.publish(this.message)
+    },
+    stop: function(){
+      this.message = new ROSLIB.Message({
+        linear: { x: 0, y: 0, z: 0 },
+        angular: { x: 0, y: 0, z: 0},
+      })
+      this.setTopic()
+      this.topic.publish(this.message)
+    },
+    backward: function(){
+      this.message = new ROSLIB.Message({
+        linear: { x: -1, y: 0, z: 0 },
+        angular: { x: 0, y: 0, z: 0},
+      })
+      this.setTopic()
+      this.topic.publish(this.message)
+    },
+    turnLeft: function(){
+      this.message = new ROSLIB.Message({
+        linear: { x: 0.5, y: 0, z: 0 },
+        angular: { x: 0, y: 0, z: 0.5},
+      })
+      this.setTopic()
+      this.topic.publish(this.message)
+    },
+    turnRight: function(){
+      this.message = new ROSLIB.Message({
+        linear: { x: 0.5, y: 0, z: 0 },
+        angular: { x: 0, y: 0, z: -0.5},
+      })
+      this.setTopic()
+      this.topic.publish(this.message)
     },
     clearLogs: function () {
         this.logs = [];

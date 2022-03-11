@@ -35,6 +35,35 @@
                 <button @click="clearLogs">Clear Logs</button>
             </div>
         </div>
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h5>Commands</h5>
+            </div>
+
+            <!-- First row -->
+            <div class="col-md-12 text-center">
+                <button @click="forward" :disabled="loading || !connected" class="btn btn-primary">Forward</button>
+                <br><br>
+            </div>
+
+            <!-- Second Row -->
+            <div class="col-md-4 text-center">
+                <button @click="turnLeft" :disabled="loading || !connected" class="btn btn-primary">Left</button>
+            </div>
+            <div class="col-md-4 text-center">
+                <button @click="stop" :disabled="loading || !connected" class="btn btn-danger">Stop</button>
+                <br><br>
+            </div>
+            <div class="col-md-4 text-center">
+                <button @click="turnRight" :disabled="loading || !connected" class="btn btn-primary">Right</button>
+            </div>
+
+            <!-- Third row -->
+            <div class="col-md-12 text-center">
+                <button @click="backward" :disabled="loading || !connected" class="btn btn-primary">Backward</button>
+            </div>
+        </div>
     </div>
 
     <script type="text/javascript" src="main.js"></script>
