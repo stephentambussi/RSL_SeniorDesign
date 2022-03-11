@@ -14,7 +14,7 @@ def callback(message):
     motors = Int16MultiArray()
     #arr = np.array([Twist.linear.x, Twist.linear.y, Twist.angular.z])
     
-    pi = 3.14;
+    pi = 3.14
 	#((linear.x), (linear.y), (angular.z))
     velocities = np.array([[message.data[0]], [message.data[1]], [message.data[2]]]) # in m/s 
     #----------defining wheel rotations based on velocites recieved for holonomic motion-------#
