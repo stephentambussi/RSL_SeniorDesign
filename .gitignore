@@ -14,3 +14,4 @@ src/zed-ros-wrapper/
 src/ROS-Driver
 src/rplidar_ros
 src/tablet-interface
+src/pozyx_ros-1

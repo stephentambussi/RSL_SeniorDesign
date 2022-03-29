@@ -16,7 +16,7 @@ def callback(Twist):
     arr = np.array([Twist.linear.x, Twist.linear.y, Twist.angular.z])
      
     motors = Int16MultiArray()
-    pi = 3.14;
+    pi = 3.14
     velocities = np.array([[Twist.linear.x], [Twist.linear.y], [Twist.angular.z]]) # taken from joystick in m/s
     #print(velocities)
     #----------defining wheel rotations based on velocites recieved for holonomic motion-------#
