@@ -8,10 +8,10 @@ devel/
 .vscode/
 
 # these folders within source
+src/rplidar_ros/
 src/teleop_twist_joy/
 src/zed-ros-examples/
 src/zed-ros-wrapper/
 src/ROS-Driver
-src/rplidar_ros
 src/tablet-interface
 src/pozyx_ros-1
