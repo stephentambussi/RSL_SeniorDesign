@@ -4,7 +4,7 @@ var app = new Vue({
   data: {
     connected: false,
     ros: null,
-    ws_address: "",
+    ws_address: "ws://172.20.197.87:9090",
     logs: [],
     topic: null,
     message: null
@@ -49,6 +49,7 @@ var app = new Vue({
         })
         this.setTopic()
         this.topic.publish(this.message)
+        console.log("published")
     },
     stop: function(){
       this.message = new ROSLIB.Message({
