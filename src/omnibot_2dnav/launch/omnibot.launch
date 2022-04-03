@@ -26,7 +26,22 @@
 
     <!-- TODO: then call odom_node (Odom.cpp) that takes in imu data from zed and publishes it -->
 
-    <!-- TODO: add call to map nodes and others from tutorial -->
+    <!-- Map File -->
+    <arg name="map_file" default="$(find senior_design_ws)/maps/blank_map_complete.yaml"/>
+
+    <!-- Map Server -->
+    <!-- Publish: /map, /map_metadata -->
+    <node pkg="map_server" name="map_server" type="map_server" args="$(arg map_file)" />
+
+    <!-- Initial Pose and Goal Publisher -->
+    <!-- Publish: /initialpose, /move_base_simple/goal -->
+    <node pkg="rviz" type="rviz" name="rviz">
+    </node> 
+
+    <!-- Subscribe: /initialpose, /move_base_simple/goal -->
+    <!-- Publish: /initial_2d, /goal_2d --> 
+    <node pkg="navigator" type="rviz_click_to_2d" name="rviz_click_to_2d">
+    </node>   
 
     <!-- Driver Node -->  
     <!-- Subscribe: /cmd_vel -->
