@@ -9,6 +9,7 @@ project(navigator)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   tf
+  tf2
   geometry_msgs
   roscpp
   zed_interfaces

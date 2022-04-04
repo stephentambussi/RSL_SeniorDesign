@@ -5,19 +5,37 @@ raytrace_range: 3.0 #robot will attempt to clear out space in front of it up to 
 #dimensions of square robot (x, y) -- center is assumed to be (0.0, 0.0)
 footprint: [[0.305, 0.305], [-0.305, 0.305], [-0.305, -0.305], [0.305, -0.305]]
 
-#Robot will treat paths that stay this distance or more away from obstacles as having equal obstacle cost
-inflation_radius: 0.55
+map_topic: /map
+subscribe_to_updates: true
+global_frame: odom
+robot_base_frame: base_link
+update_frequency: 30.0
+publish_frequency: 30.0
+rolling_window: false
 
-#defines a list of sensors that pass information to the costmap
-observation_sources: laser_scan_sensor #point_cloud_sensor #pozyx_sensor
+plugins:
+  - {name: static_layer, type: "costmap_2d::StaticLayer"}
+  - {name: obstacle_layer, type: "costmap_2d::ObstacleLayer"}
+  - {name: inflation_layer, type: "costmap_2d::InflationLayer"}
 
-#Sensors from list above defined below
+static_layer:
+  map_topic: /map
+  subscribe_to_updates: false
 
-#sensor_frame = name of sensor coordinate frame
-#data_type = depends on which message topic uses
-#topic = name of topic sensor publishes data on
-#marking = whether sensor will be used to add obstacle info to the costmap
-#clearing = whether sensor will be used to clear obstacle info from the costmap
-laser_scan_sensor: (sensor_frame: base_laser, data_type: LaserScan, topic: scan, marking: true, clearing: true)
-#point_cloud_sensor: ()
-#pozyx_sensor: ()
+obstacle_layer:
+    #defines a list of sensors that pass information to the costmap
+    observation_sources: laser_scan_sensor
+    #sensor_frame = name of sensor coordinate frame
+    #data_type = depends on which message topic uses
+    #topic = name of topic sensor publishes data on
+    #marking = whether sensor will be used to add obstacle info to the costmap
+    #clearing = whether sensor will be used to clear obstacle info from the costmap
+    laser_scan_sensor: {sensor_frame: laser, data_type: LaserScan, topic: scan, marking: true, clearing: true}
+
+inflation_layer:
+  #Robot will treat paths that stay this distance or more away from obstacles as having equal obstacle cost
+  inflation_radius: 0.55
+
+
+
+
