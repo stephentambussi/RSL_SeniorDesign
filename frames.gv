@@ -1,21 +1,14 @@
 digraph G {
-"zed2i_left_camera_frame" -> "zed2i_imu_link"[label="Broadcaster: /zed2i/zed_node\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1649035891.871 sec old)\nBuffer length: 0.000 sec\n"];
-"zed2i_camera_center" -> "zed2i_left_camera_frame"[label="Broadcaster: /zed2i/zed2i_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1649035891.871 sec old)\nBuffer length: 0.000 sec\n"];
-"base_link" -> "zed2i_base_link"[label="Broadcaster: /zed2i/zed2i_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1649035891.871 sec old)\nBuffer length: 0.000 sec\n"];
-"base_footprint" -> "base_link"[label="Broadcaster: /base_link_broadcaster\nAverage rate: 434.532 Hz\nMost recent transform: 1649035891.899 ( -0.027 sec old)\nBuffer length: 4.936 sec\n"];
-"zed2i_base_link" -> "zed2i_camera_center"[label="Broadcaster: /zed2i/zed2i_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1649035891.871 sec old)\nBuffer length: 0.000 sec\n"];
-"zed2i_left_camera_frame" -> "zed2i_left_camera_optical_frame"[label="Broadcaster: /zed2i/zed2i_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1649035891.871 sec old)\nBuffer length: 0.000 sec\n"];
-"zed2i_camera_center" -> "zed2i_right_camera_frame"[label="Broadcaster: /zed2i/zed2i_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1649035891.871 sec old)\nBuffer length: 0.000 sec\n"];
-"zed2i_right_camera_frame" -> "zed2i_right_camera_optical_frame"[label="Broadcaster: /zed2i/zed2i_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1649035891.871 sec old)\nBuffer length: 0.000 sec\n"];
-"base_link" -> "imu"[label="Broadcaster: /imu_broadcaster\nAverage rate: 33.345 Hz\nMost recent transform: 1649035891.893 ( -0.022 sec old)\nBuffer length: 4.918 sec\n"];
-"map" -> "odom"[label="Broadcaster: /zed2i/zed_node\nAverage rate: 435.212 Hz\nMost recent transform: 1649035891.891 ( -0.020 sec old)\nBuffer length: 4.929 sec\n"];
-"base_link" -> "laser"[label="Broadcaster: /base_link_to_laser\nAverage rate: 33.336 Hz\nMost recent transform: 1649035891.878 ( -0.006 sec old)\nBuffer length: 4.890 sec\n"];
+"base_footprint" -> "base_link"[label="Broadcaster: /base_link_broadcaster\nAverage rate: 33.376 Hz\nMost recent transform: 1649114739.438 ( -0.021 sec old)\nBuffer length: 4.914 sec\n"];
+"map" -> "odom"[label="Broadcaster: /map_to_odom\nAverage rate: 33.369 Hz\nMost recent transform: 1649114739.440 ( -0.022 sec old)\nBuffer length: 4.915 sec\n"];
+"base_link" -> "imu"[label="Broadcaster: /imu_broadcaster\nAverage rate: 33.368 Hz\nMost recent transform: 1649114739.442 ( -0.024 sec old)\nBuffer length: 4.915 sec\n"];
+"base_link" -> "laser"[label="Broadcaster: /base_link_to_laser\nAverage rate: 33.374 Hz\nMost recent transform: 1649114739.417 ( 0.000 sec old)\nBuffer length: 4.884 sec\n"];
 edge [style=invis];
  subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
-"Recorded at time: 1649035891.871"[ shape=plaintext ] ;
- }->"map";
-edge [style=invis];
- subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
-"Recorded at time: 1649035891.871"[ shape=plaintext ] ;
+"Recorded at time: 1649114739.418"[ shape=plaintext ] ;
  }->"base_footprint";
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 1649114739.418"[ shape=plaintext ] ;
+ }->"map";
 }

@@ -64,6 +64,7 @@ void set_initial_2d(const geometry_msgs::PoseStamped &rvizClick) {
 // Calculate the distance the left wheel has traveled since the last cycle
 void Calc_Left_Right(const geometry_msgs::Twist cmd_vel) {
 
+    //TODO: this code is temporary, need to get data from wheel encoders
     ros::Time current_time, last_time;
     current_time = ros::Time::now();
     float elapsed_time;
