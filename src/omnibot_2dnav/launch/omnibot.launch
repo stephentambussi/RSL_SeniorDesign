@@ -31,6 +31,8 @@
     <!-- Extended Kalman Filter from robot_pose_ekf Node-->
     <!-- Subscribe: /odom, /imu_data, /vo -->
     <!-- Publish: /robot_pose_ekf/odom_combined -->
+    <remap from="odom" to="odom_data_quat" />
+    <remap from="imu_data" to="/zed2i/zed_node/imu/data" />
     <node pkg="robot_pose_ekf" type="robot_pose_ekf" name="robot_pose_ekf">
         <param name="output_frame" value="odom"/>
         <param name="base_footprint_frame" value="base_footprint"/>
@@ -42,8 +44,6 @@
         <param name="gps_used" value="false"/>
         <param name="debug" value="false"/>
         <param name="self_diagnose" value="false"/>
-        <remap from="odom" to="odom_data_quat" />
-        <remap from="imu_data" to="imu/data" />
     </node>
 
     <!-- Map File -->

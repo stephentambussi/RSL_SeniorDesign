@@ -44,6 +44,7 @@ bool imuHeadingInitialized = false;
 using namespace std;
 
 //TODO: figure out how to get wheel encoder information from motor controllers for odom
+//This code should only subscribe to wheel encoder data and initial_pose 
 
 // Get initial_2d message from either Rviz clicks or a manual pose publisher
 void set_initial_2d(const geometry_msgs::PoseStamped &rvizClick) {
@@ -65,12 +66,14 @@ void set_initial_2d(const geometry_msgs::PoseStamped &rvizClick) {
 void Calc_Left_Right(const geometry_msgs::Twist cmd_vel) {
 
     //TODO: this code is temporary, need to get data from wheel encoders
+    /*
     ros::Time current_time, last_time;
     current_time = ros::Time::now();
     float elapsed_time;
     elapsed_time = current_time.toSec() - odomOld.header.stamp.toSec();
     distanceLeft = cmd_vel.linear.x * elapsed_time;
     distanceRight = cmd_vel.linear.x * elapsed_time;
+    */
     /*
     if(leftCount.data != 0 && lastCountL != 0) {
             
@@ -276,12 +279,14 @@ void update_heading(const sensor_msgs::Imu &imuMsg) {
 
 // Update odometry information
 void update_odom() {
-
   // Calculate the average distance
   double cycleDistance = (distanceRight + distanceLeft) / 2;
   
   // Calculate the number of radians the robot has turned since the last cycle
   double cycleAngle = asin((distanceRight-distanceLeft)/WHEEL_BASE);
+
+  //TEMP
+  cout << "CycleDistance: " << cycleDistance << " CycleAngle: " << cycleAngle << endl;
 
   // Average angle during the last cycle
   double avgAngle = cycleAngle/2 + odomOld.pose.pose.orientation.z;
