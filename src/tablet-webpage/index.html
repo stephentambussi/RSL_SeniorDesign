@@ -1,71 +1,113 @@
 <html>
 
 <head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
-    <script type="text/javascript" src="https://static.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>My first web page for ROS!</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js">
+    </script>
+    <script src="https://static.robotwebtools.org/roslibjs/current/roslib.min.js">
+    </script>
+    <script type="text/javascript" src="mjpegcanvas.min.js"></script>
+
+    <style type="text/css">
+        #dragstartzone {
+            position: relative;
+            display: inline-block;
+            width: 200px;
+            height: 200px;
+            border: 1px solid #333;
+            border-radius: 50%;
+            z-index: 10;
+            -moz-user-select: -moz-none;
+            -khtml-user-select: none;
+            -webkit-user-select: none;
+        }
+
+        #dragCircle {
+            position: absolute;
+            z-index: 9;
+            border: 1px solid transparent;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 30%);
+            -moz-user-select: -moz-none;
+            -khtml-user-select: none;
+            -webkit-user-select: none;
+        }
+
+        #dragCircle:hover {
+            background-color: lightcoral;
+        }
+    </style>
 </head>
 
-<body>
-    <div id="app" class="container">
-        <div class="jumbotron">
-            <h1>ARC</h1>
-        </div>
-
-        <div class="row" style="max-height:200px;">
-            <div class="col-md-6">
-                <h3>Connection Status</h3>
-
-                <p class="text-success" v-if="connected">Connected!</p>
-                <p class="text-danger" v-else>Not Connected!</p>
-
-                <label>Websocket server address</label>
-                <input type="text" v-model='ws_address'/>
-                <br />
-                <button @click="disconnect" class="btn btn-danger" v-if="connected">Disconnect</button>
-                <button @click="connect" class="btn btn-success" v-else>Connect</button>
+<body class="d-flex flex-column h-100">
+    <!-- header of the page -->
+    <header class="header">
+        <div class="container">
+            <div class="jumbotron text-center">
+                <h1>Hello from Robot Ignite Academy!</h1>
+                <p>Let's connect our website to a ROS robot!</p>
             </div>
-            <div class="col-md-6" style="max-height:200px; overflow:auto">
-                <h3>Log messages</h3>
-                <div>
-                    <p v-for="log in logs">
-                        {{log}}
-                    </p>
+        </div>
+    </header>
+
+    <!-- main content -->
+    <main id="vueApp">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3>{{ menu_title }}</h3>
+                            <hr>
+                            <label>ROSBridge address</label>
+                            <br>
+                            <input type="text" v-model="rosbridge_address" />
+                            <br>
+                            <button class="mt-2 btn btn-success" v-if="connected"
+                                @click="disconnect">Connected!</button>
+                            <button class="mt-2 btn btn-primary" v-else @click="connect">Connect!</button>
+                        </div>
+                    </div>
                 </div>
-                <button @click="clearLogs">Clear Logs</button>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h2 class="text-center">Joystick</h2>
+                            <hr>
+                            <p>Some actions for the robot</p>
+                            <div id="dragstartzone" @mousedown="startDrag" @mousemove="doDrag">
+                            </div>
+                            <div id="dragCircle" :style="dragCircleStyle"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="text-center">Joystick values</h2>
+                            <hr />
+                            <p>Vertical: {{ joystick.vertical.toFixed(3) }}</p>
+                            <br />
+                            <p>Horizontal: {{ joystick.horizontal.toFixed(3) }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-6 text-center">
+                    <div id="divCamera"></div>
+                </div>
             </div>
         </div>
+    </main>
 
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <h5>Commands</h5>
-            </div>
+    <!-- footer -->
+    <footer class="footer mt-auto bg-dark text-light">
+    </footer>
 
-            <!-- First row -->
-            <div class="col-md-12 text-center">
-                <button @click="forward" :disabled="loading || !connected" class="btn btn-primary">Forward</button>
-                <br><br>
-            </div>
+    <script src="main.js">
 
-            <!-- Second Row -->
-            <div class="col-md-4 text-center">
-                <button @click="turnLeft" :disabled="loading || !connected" class="btn btn-primary">Left</button>
-            </div>
-            <div class="col-md-4 text-center">
-                <button @click="stop" :disabled="loading || !connected" class="btn btn-danger">Stop</button>
-                <br><br>
-            </div>
-            <div class="col-md-4 text-center">
-                <button @click="turnRight" :disabled="loading || !connected" class="btn btn-primary">Right</button>
-            </div>
-
-            <!-- Third row -->
-            <div class="col-md-12 text-center">
-                <button @click="backward" :disabled="loading || !connected" class="btn btn-primary">Backward</button>
-            </div>
-        </div>
-    </div>
-
-    <script type="text/javascript" src="main.js"></script>
+    </script>
 </body>
+
 </html>
