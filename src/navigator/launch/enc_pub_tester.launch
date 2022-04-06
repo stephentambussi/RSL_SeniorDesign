@@ -1,6 +1,0 @@
-<launch>
-
-<node name="motorEncoder_pub1" pkg="navigator" type="motorEncoder_pub1.py" output="screen"/>
-<node name="motorEncoder_pub2" pkg="navigator" type="motorEncoder_pub2.py" output="screen"/>
-
-</launch>
