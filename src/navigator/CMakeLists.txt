@@ -11,7 +11,9 @@ find_package(catkin REQUIRED COMPONENTS
   tf
   tf2
   geometry_msgs
+  std_msgs
   roscpp
+  rospy
   zed_interfaces
 )
 

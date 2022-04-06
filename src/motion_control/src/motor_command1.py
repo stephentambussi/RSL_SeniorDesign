@@ -23,8 +23,8 @@ value_received = 0
 def DriveUnit_1(val):
 
 	print("Motor 1", val[0], "Motor 2", val[1],"Motor 3", val[2], "Motor 4", val[3])
-	payload1 = "!G 1 " + str(round(val[0])) + "_"  # chaged val[0] to 53
-	payload2 = "!G 2 " + str(round(val[1])) + "_"
+	payload1 = "!G 1 " + str(round(val[0])) + "\r"  # chaged val[0] to 53
+	payload2 = "!G 2 " + str(round(val[1])) + "\r"
 	ser_drive_unit_1.write(payload1)
 	ser_drive_unit_1.write(payload2)
 
