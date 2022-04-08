@@ -5,6 +5,7 @@
 #include <tf2/LinearMath/Quaternion.h>
 #include <tf2_ros/transform_broadcaster.h>
 #include <cmath>
+#include <chrono>
 
 // Create odometry data publishers
 ros::Publisher odom_data_pub;
@@ -22,7 +23,7 @@ const double PI = 3.141592;
 //const double TICKS_PER_REVOLUTION = 854; // For reference purposes.
 const double WHEEL_RADIUS = 0.07; // Wheel radius in meters
 const double WHEEL_BASE = 0.42; // Center of left tire to center of right tire
-//const double TICKS_PER_METER = 2880;
+const double circum = 2 * M_PI * WHEEL_RADIUS; //get circumference of wheel (distance traveled per 1 revolution)
 
 // Distance both wheels have traveled
 double distanceLeft = 0;
@@ -44,14 +45,40 @@ void set_initial_2d(const geometry_msgs::PoseStamped &rvizClick) {
 
 // Calculate the distance the left wheel has traveled since the last cycle
 void Calc_Left(const std_msgs::Int32MultiArray& leftRPMs) {
-  //TODO: calculate distance traveled from RPM
-  cout << "Left motor RPMs: " << leftRPMs.data[0] << endl;
+  //cout << "Left motor RPMs: " << leftRPMs.data[0] << endl;
+  static chrono::steady_clock::time_point startL;
+  static int start_flagL = 0;
+  if(leftRPMs.data[0] != 0 && start_flagL != 0)
+  {
+    auto endL = chrono::steady_clock::now();
+    auto durL = chrono::duration<double>(endL-startL).count();
+    //cout << "Duration: " << durL << endl;
+    double dist_per_min = circum * leftRPMs.data[0]; //calculate the distance traveled per minute from current RPM value
+    //calculate the distance traveled since the last cycle
+    distanceLeft = dist_per_min * (durL / 60.0);
+    //cout << "Distance since last cycle: " << distanceLeft << endl;
+  }
+  startL = chrono::steady_clock::now();
+  start_flagL = 1;
 }
 
 // Calculate the distance the right wheel has traveled since the last cycle
 void Calc_Right(const std_msgs::Int32MultiArray& rightRPMs) {
-  //TODO: calculate distance traveled from RPM
-  cout << "Right motor RPMs: " << rightRPMs.data[0] << endl;
+  //cout << "Right motor RPMs: " << rightRPMs.data[0] << endl;
+  static chrono::steady_clock::time_point startR;
+  static int start_flagR = 0;
+  if(rightRPMs.data[0] != 0 && start_flagR != 0)
+  {
+    auto endR = chrono::steady_clock::now();
+    auto durR = chrono::duration<double>(endR-startR).count();
+    //cout << "Duration: " << durR << endl;
+    double dist_per_min = circum * rightRPMs.data[0]; //calculate the distance traveled per minute from current RPM value
+    //calculate the distance traveled since the last cycle
+    distanceRight = dist_per_min * (durR / 60.0);
+    //cout << "Distance since last cycle: " << distanceRight << endl;
+  }
+  startR = chrono::steady_clock::now();
+  start_flagR = 1;
 }
 
 // Publish a nav_msgs::Odometry message in quaternion format
@@ -103,9 +130,6 @@ void update_odom() {
   
   // Calculate the number of radians the robot has turned since the last cycle
   double cycleAngle = asin((distanceRight-distanceLeft)/WHEEL_BASE);
-
-  //TEMP
-  cout << "CycleDistance: " << cycleDistance << " CycleAngle: " << cycleAngle << endl;
 
   // Average angle during the last cycle
   double avgAngle = cycleAngle/2 + odomOld.pose.pose.orientation.z;
