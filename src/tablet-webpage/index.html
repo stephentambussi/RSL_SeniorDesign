@@ -72,13 +72,13 @@
             </div>
 
             <!-- First row -->
-            <div class="col-md-12 text-center">
+            <!-- <div class="col-md-12 text-center">
                 <button @click="forward" :disabled="loading || !connected" class="btn btn-primary">Forward</button>
                 <br><br>
-            </div>
+            </div> -->
 
             <!-- Second Row -->
-            <div class="col-md-4 text-center">
+            <!-- <div class="col-md-4 text-center">
                 <button @click="turnLeft" :disabled="loading || !connected" class="btn btn-primary">Left</button>
             </div>
             <div class="col-md-4 text-center">
@@ -87,13 +87,14 @@
             </div>
             <div class="col-md-4 text-center">
                 <button @click="turnRight" :disabled="loading || !connected" class="btn btn-primary">Right</button>
-            </div>
+            </div> -->
 
             <!-- Third row -->
-            <div class="col-md-12 text-center">
+            <!-- <div class="col-md-12 text-center">
                 <button @click="backward" :disabled="loading || !connected" class="btn btn-primary">Backward</button>
-            </div>
+            </div> -->
         </div>
+        <div class="row">
         <div class="col-md-4">
                     <div class="card">
                         <div class="card-body text-center">
@@ -105,6 +106,7 @@
                             <div id="dragCircle" :style="dragCircleStyle"></div>
                         </div>
                     </div>
+                    <button @click="stopDrag" class="btn btn-danger">Stop joystick</button>
                 </div>
                 <div class="col-md-4">
                     <div class="card">
@@ -117,6 +119,7 @@
                         </div>
                     </div>
                 </div>
+        </div>
     </div>
 
     <script type="text/javascript" src="main.js"></script>

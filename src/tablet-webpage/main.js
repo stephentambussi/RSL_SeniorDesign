@@ -5,7 +5,7 @@ var app = new Vue({
     connected: false,
     loading: true,
     ros: null,
-    ws_address: "ws://0.0.0.0:9000",
+    ws_address: "ws://0.0.0.0:9090",
     logs: [],
     topic: null,
     message: null,
@@ -149,7 +149,7 @@ var app = new Vue({
     },
     setJoystickVals() {
       this.joystick.vertical = -1 * (this.y / 200 - 0.5);
-      this.joystick.horizontal = +1 * (this.x / 200 - 0.5);
+      this.joystick.horizontal = -1 * (this.x / 200 - 0.5);
       this.joyPublish()
     },
     resetJoystickVals() {
