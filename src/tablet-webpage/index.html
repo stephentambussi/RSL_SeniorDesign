@@ -95,28 +95,28 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card">
-                <div class="card-body text-center">
-                    <h2 class="text-center">Joystick</h2>
-                    <hr>
-                    <p>Some actions for the robot</p>
-                    <div id="dragstartzone" @mousedown="startDrag" @mousemove="doDrag">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h2 class="text-center">Joystick</h2>
+                            <hr>
+                            <p>Some actions for the robot</p>
+                            <div id="dragstartzone" @mousedown="startDrag" @mousemove="doDrag">
+                            </div>
+                            <div id="dragCircle" :style="dragCircleStyle"></div>
+                        </div>
                     </div>
-                    <div id="dragCircle" :style="dragCircleStyle"></div>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h2 class="text-center">Joystick values</h2>
-                    <hr />
-                    <p>Vertical: {{ joystick.vertical.toFixed(3) }}</p>
-                    <br />
-                    <p>Horizontal: {{ joystick.horizontal.toFixed(3) }}</p>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="text-center">Joystick values</h2>
+                            <hr />
+                            <p>Vertical: {{ joystick.vertical.toFixed(3) }}</p>
+                            <br />
+                            <p>Horizontal: {{ joystick.horizontal.toFixed(3) }}</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
     </div>
 
     <script type="text/javascript" src="main.js"></script>
