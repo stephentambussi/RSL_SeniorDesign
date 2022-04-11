@@ -124,6 +124,7 @@ void publish_quat() {
 }
 
 // Update odometry information
+//TODO: update with correct math
 void update_odom() {
   // Calculate the average distance
   double cycleDistance = (distanceRight + distanceLeft) / 2;
@@ -143,6 +144,7 @@ void update_odom() {
   else{}
 
   // Calculate the new pose (x, y, and theta)
+  //TODO: calculate pose with omni-wheel math
   odomNew.pose.pose.position.x = odomOld.pose.pose.position.x + cos(avgAngle)*cycleDistance;
   odomNew.pose.pose.position.y = odomOld.pose.pose.position.y + sin(avgAngle)*cycleDistance;
   odomNew.pose.pose.orientation.z = cycleAngle + odomOld.pose.pose.orientation.z;
@@ -165,6 +167,7 @@ void update_odom() {
 	else{}
 
   // Compute the velocity
+  //TODO: compute velocity with correct math
   odomNew.header.stamp = ros::Time::now();
   odomNew.twist.twist.linear.x = cycleDistance/(odomNew.header.stamp.toSec() - odomOld.header.stamp.toSec());
   odomNew.twist.twist.angular.z = cycleAngle/(odomNew.header.stamp.toSec() - odomOld.header.stamp.toSec());
