@@ -136,7 +136,7 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(follow_me_node src/follow_me_mode.cpp)
 add_executable(coll_avoid_node src/collisionNav.cpp)
-add_executable(odom_pub src/Odom.cpp)
+add_executable(odom_pub src/Odom2.cpp)
 add_executable(rviz_click_to_2d src/rviz_click_to_2d.cpp)
 #add_executable(speed_checker src/speed_checker.cpp)
 target_link_libraries(follow_me_node ${catkin_LIBRARIES})
