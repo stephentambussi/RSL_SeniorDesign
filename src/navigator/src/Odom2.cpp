@@ -16,19 +16,43 @@ double vth = 0.0; //angular velocity - rad/s
 //Robot physical constants
 //const double TICKS_PER_REVOLUTION = 854; // For reference purposes.
 const double WHEEL_RADIUS = 0.07; // Wheel radius in meters
-const double WHEEL_BASE = 0.42; // Center of left tire to center of right tire
+const double wheel_to_center_x = 0.21; // center of tire to center of robot
+const double wheel_to_center_y = 0.1715;
 const double circum = 2 * M_PI * WHEEL_RADIUS; //get circumference of wheel (distance traveled per 1 revolution)
+
+//RPM to rad/s conversion constant
+const double rpm_to_rad = 0.10472;
 
 //Flag to see if initial pose has been received
 bool initialPoseRecieved = false;
 
+//              {m1, m2, m3, m4}
+int rpms [4] = {0, 0, 0, 0}; //initialize empty rpm array
+
 using namespace std;
 
-//TODO: get RPMs from all 4 wheels, convert to rad/s, calculate velocity
+void enc1_callback(const std_msgs::Int32MultiArray& enc1_RPMs)
+{
+    rpms[0] = enc1_RPMs.data[0];
+    rpms[1] = enc1_RPMs.data[1];
+}
+
+void enc2_callback(const std_msgs::Int32MultiArray& enc2_RPMs)
+{
+    rpms[2] = enc2_RPMs.data[0];
+    rpms[3] = enc2_RPMs.data[1];
+}
 
 void calc_vel()
 {
-    //TODO: calculate
+    double w1 = rpms[0] * rpm_to_rad; //in rad/s
+    double w2 = rpms[1] * rpm_to_rad;
+    double w3 = rpms[2] * rpm_to_rad;
+    double w4 = rpms[3] * rpm_to_rad;
+    vx = (w1 + w2 + w3 + w4) * (WHEEL_RADIUS / 4);
+    vy = (w2 + w3 - w1 - w4) * (WHEEL_RADIUS / 4);
+    double wheel_to_center_sum = wheel_to_center_x + wheel_to_center_y;
+    vth = (w2 + w4 - w1 - w3) * (WHEEL_RADIUS / (4 * wheel_to_center_sum));
 }
 
 //Get initial_2d message from either Rviz clicks or a manual pose publisher
@@ -105,9 +129,8 @@ int main(int argc, char **argv)
     ros::NodeHandle n;
     ros::Publisher odom_pub = n.advertise<nav_msgs::Odometry>("odom_data_quat", 100);
     ros::Subscriber subInitialPose = n.subscribe("initial_2d", 1, set_initial_2d);
-    //TODO: change these subscribers when you change serial publisher for RPMs
-    ros::Subscriber subForRightCounts = n.subscribe("right_RPMs", 100, Calc_Right, ros::TransportHints().tcpNoDelay());
-    ros::Subscriber subForLeftCounts = n.subscribe("left_RPMs", 100, Calc_Left, ros::TransportHints().tcpNoDelay());
+    ros::Subscriber subForEnc1Counts = n.subscribe("enc1_RPMs", 100, enc1_callback, ros::TransportHints().tcpNoDelay());
+    ros::Subscriber subForEnc2Counts = n.subscribe("enc2_RPMs", 100, enc2_callback, ros::TransportHints().tcpNoDelay());
     
     tf::TransformBroadcaster odom_broadcaster;
 
