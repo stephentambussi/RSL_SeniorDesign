@@ -1,4 +1,5 @@
 #include <ros/ros.h>
+#include "std_msgs/Int32MultiArray.h"
 #include <tf/transform_broadcaster.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <nav_msgs/Odometry.h>
@@ -24,7 +25,10 @@ const double circum = 2 * M_PI * WHEEL_RADIUS; //get circumference of wheel (dis
 const double rpm_to_rad = 0.10472;
 
 //Flag to see if initial pose has been received
-bool initialPoseRecieved = false;
+bool initialPoseReceived = false;
+
+ros::Time current_time, last_time;
+ros::Publisher odom_pub;
 
 //              {m1, m2, m3, m4}
 int rpms [4] = {0, 0, 0, 0}; //initialize empty rpm array
@@ -33,14 +37,14 @@ using namespace std;
 
 void enc1_callback(const std_msgs::Int32MultiArray& enc1_RPMs)
 {
-    rpms[0] = enc1_RPMs.data[0];
-    rpms[1] = enc1_RPMs.data[1];
+    rpms[0] = int(enc1_RPMs.data[0]);
+    rpms[1] = int(enc1_RPMs.data[1]);
 }
 
 void enc2_callback(const std_msgs::Int32MultiArray& enc2_RPMs)
 {
-    rpms[2] = enc2_RPMs.data[0];
-    rpms[3] = enc2_RPMs.data[1];
+    rpms[2] = int(enc2_RPMs.data[0]);
+    rpms[3] = int(enc2_RPMs.data[1]);
 }
 
 void calc_vel()
@@ -61,7 +65,7 @@ void set_initial_2d(const geometry_msgs::PoseStamped &rvizClick) {
   x = rvizClick.pose.position.x;
   y = rvizClick.pose.position.y;
   th = rvizClick.pose.orientation.z;
-  initialPoseRecieved = true;
+  initialPoseReceived = true;
 }
 
 //Update the odometry information
@@ -127,14 +131,13 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "odom_pub");
 
     ros::NodeHandle n;
-    ros::Publisher odom_pub = n.advertise<nav_msgs::Odometry>("odom_data_quat", 100);
+    odom_pub = n.advertise<nav_msgs::Odometry>("odom_data_quat", 100);
     ros::Subscriber subInitialPose = n.subscribe("initial_2d", 1, set_initial_2d);
     ros::Subscriber subForEnc1Counts = n.subscribe("enc1_RPMs", 100, enc1_callback, ros::TransportHints().tcpNoDelay());
     ros::Subscriber subForEnc2Counts = n.subscribe("enc2_RPMs", 100, enc2_callback, ros::TransportHints().tcpNoDelay());
     
     tf::TransformBroadcaster odom_broadcaster;
 
-    ros::Time current_time, last_time;
     current_time = ros::Time::now();
     last_time = ros::Time::now();
 
