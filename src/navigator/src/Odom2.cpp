@@ -120,6 +120,19 @@ void update_odom()
     odom.twist.twist.linear.y = vy;
     odom.twist.twist.angular.z = vth;
 
+    //Using small dummy values for the covariance matrix
+    for(int i = 0; i<36; i++) {
+        if(i == 0 || i == 7 || i == 14) {
+            odom.pose.covariance[i] = .01;
+        }
+        else if (i == 21 || i == 28 || i== 35) {
+            odom.pose.covariance[i] += 0.1;
+        }
+        else {
+            odom.pose.covariance[i] = 0;
+        }
+    }
+
     //publish the message
     odom_pub.publish(odom);
 
