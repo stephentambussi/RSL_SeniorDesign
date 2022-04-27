@@ -1,9 +1,9 @@
 <html>
 
 <head>
-    <link rel="stylesheet" src="bootstrap.css">
-    <script type="text/javascript" src="roslib.min.js"></script>
-    <script src="vue.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <script type="text/javascript" src="js/roslib.min.js"></script>
+    <script src="js/vue.js"></script>
 
     <style type="text/css">
         #dragstartzone {
@@ -39,7 +39,7 @@
 <body>
     <div id="app" class="container">
         <div class="jumbotron">
-            <h1>Hello</h1>
+            <h1>ARC</h1>
         </div>
 
         <div class="row" style="max-height:200px;">
@@ -50,7 +50,7 @@
                 <p class="text-danger" v-else>Not Connected!</p>
 
                 <label>Websocket server address</label>
-                <input type="text" v-model='ws_address'/>
+                <input type="text" v-model='ws_address' />
                 <br />
                 <button @click="disconnect" class="btn btn-danger" v-if="connected">Disconnect</button>
                 <button @click="connect" class="btn btn-success" v-else>Connect</button>
@@ -70,37 +70,28 @@
             <div class="col-md-12 text-center">
                 <h5>Commands</h5>
             </div>
-
-            <!-- First row -->
-            <!-- <div class="col-md-12 text-center">
-                <button @click="forward" :disabled="loading || !connected" class="btn btn-primary">Forward</button>
-                <br><br>
-            </div> -->
-
-            <!-- Second Row -->
-            <!-- <div class="col-md-4 text-center">
-                <button @click="turnLeft" :disabled="loading || !connected" class="btn btn-primary">Left</button>
-            </div>
-            <div class="col-md-4 text-center">
-                <button @click="stop" :disabled="loading || !connected" class="btn btn-danger">Stop</button>
-                <br><br>
-            </div>
-            <div class="col-md-4 text-center">
-                <button @click="turnRight" :disabled="loading || !connected" class="btn btn-primary">Right</button>
-            </div> -->
-
-            <!-- Third row -->
-            <!-- <div class="col-md-12 text-center">
-                <button @click="backward" :disabled="loading || !connected" class="btn btn-primary">Backward</button>
-            </div> -->
         </div>
-        <div class="row">
-        <div class="col-md-4">
+        <!-- Tab Links -->
+        <div class="tabs text-center">
+            <button class="tablinks" @click="openTab(event, 'manual')">Manual</button>
+            <button class="tablinks" @click="openTab(event, 'auto')">Auto</button>
+            <button class="tablinks" @click="openTab(event, 'follow')">Follow</button>
+        </div>
+
+        <!-- Tab content -->
+        <!-- Manual Mode -->
+        <div id="manual" class="tabcontent">
+            <div class="row">
+                <div class="col-md-4">
                     <div class="card">
+                        <div class="card-body"></div>
+                        <h2 class="text-center">Manual Mode</h2>    
+                        <Button @click="" class="btn btn-danger" v-if="manualActive">Diactivate Manual Mode</Button>
+                        <Button @click="" class="btn btn-success" v-else>Activate Manual Mode</Button>
                         <div class="card-body text-center">
                             <h2 class="text-center">Joystick</h2>
                             <hr>
-                            <p>Some actions for the robot</p>
+                            <p>Manual Control</p>
                             <div id="dragstartzone" @mousedown="startDrag" @mousemove="doDrag">
                             </div>
                             <div id="dragCircle" :style="dragCircleStyle"></div>
@@ -119,9 +110,41 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+        <!-- Auto Mode -->
+        <div id="auto" class="tabcontent">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="text-center">Auto Mode</h2>
+                            <hr />
+                            <p>Auto Mode is not implemented yet.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Follow Mode -->
+        <div id="follow" class="tabcontent">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="text-center">Follow Mode</h2>
+                            <hr />
+                            <p>Follow Mode is not implemented yet.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <script type="text/javascript" src="main.js"></script>
+
+    <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" href="js/bootstrap.min.js"></script>
 </body>
+
 </html>
