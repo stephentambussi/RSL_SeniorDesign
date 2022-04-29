@@ -9,11 +9,6 @@ double x = 0.0;
 double y = 0.0;
 double th = 0.0;
 
-//Initial velocities
-double vx = 0.0; //linear x velocity - m/s
-double vy = 0.0; //linear y velocity - m/s
-double vth = 0.0; //angular velocity - rad/s
-
 //Robot physical constants
 //const double TICKS_PER_REVOLUTION = 854; // For reference purposes.
 const double WHEEL_RADIUS = 0.07; // Wheel radius in meters
@@ -29,6 +24,8 @@ bool initialPoseReceived = false;
 
 ros::Time current_time, last_time;
 ros::Publisher odom_pub;
+
+int print_delay = 0;
 
 //              {m1, m2, m3, m4}
 int rpms [4] = {0, 0, 0, 0}; //initialize empty rpm array
@@ -47,18 +44,6 @@ void enc2_callback(const std_msgs::Int32MultiArray& enc2_RPMs)
     rpms[3] = int(enc2_RPMs.data[1]);
 }
 
-void calc_vel()
-{
-    double w1 = rpms[0] * rpm_to_rad; //in rad/s
-    double w2 = rpms[1] * rpm_to_rad;
-    double w3 = rpms[2] * rpm_to_rad;
-    double w4 = rpms[3] * rpm_to_rad;
-    vx = (w1 + w2 + w3 + w4) * (WHEEL_RADIUS / 4);
-    vy = (w2 + w3 - w1 - w4) * (WHEEL_RADIUS / 4);
-    double wheel_to_center_sum = wheel_to_center_x + wheel_to_center_y;
-    vth = (w2 + w4 - w1 - w3) * (WHEEL_RADIUS / (4 * wheel_to_center_sum));
-}
-
 //Get initial_2d message from either Rviz clicks or a manual pose publisher
 void set_initial_2d(const geometry_msgs::PoseStamped &rvizClick) {
 
@@ -71,7 +56,29 @@ void set_initial_2d(const geometry_msgs::PoseStamped &rvizClick) {
 //Update the odometry information
 void update_odom()
 {
+    //TODO: odom does not work because asynchronous nature of above callbacks, need to synchronize somehow
     current_time = ros::Time::now();
+
+    //Initial velocities
+    double vx = 0.0; //linear x velocity - m/s
+    double vy = 0.0; //linear y velocity - m/s
+    double vth = 0.0; //angular velocity - rad/s
+
+    //Calculate velocity
+    double w1 = rpms[0] * rpm_to_rad; //in rad/s
+    double w2 = rpms[1] * rpm_to_rad;
+    double w3 = rpms[2] * rpm_to_rad;
+    double w4 = rpms[3] * rpm_to_rad;
+    vx = (w1 + w2 + w3 + w4) * (WHEEL_RADIUS / 4);
+    if(vx < 0.05 && vx > -0.05)
+        vx = 0;
+    vy = (w2 + w3 - w1 - w4) * (WHEEL_RADIUS / 4);
+    if(vy < 0.05 && vy > -0.05)
+        vy = 0;
+    double wheel_to_center_sum = wheel_to_center_x + wheel_to_center_y;
+    vth = (w2 + w4 - w1 - w3) * (WHEEL_RADIUS / (4 * wheel_to_center_sum));
+    if(vth < 0.05 && vth > -0.05)
+        vth = 0;
 
     //compute odometry in a typical way given the velocities of the robot
     double dt = (current_time - last_time).toSec();
@@ -83,25 +90,15 @@ void update_odom()
     x += delta_x;
     y += delta_y;
     th += delta_th;
+    if(print_delay % 30 == 0)
+    {
+        cout << "Positions: x = " << x << " y = " << y << " theta = " << th << endl;
+        cout << "Velocities: x = " << vx << " y = " << vy << " theta = " << vth << endl;
+        print_delay = 0;
+    }
 
     //since all odometry is 6DOF we'll need a quaternion created from yaw
     geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(th);
-
-    //first, we'll publish the transform over tf
-    /* -- may be unnecessary -- see if it works without it
-    geometry_msgs::TransformStamped odom_trans;
-    odom_trans.header.stamp = current_time;
-    odom_trans.header.frame_id = "odom";
-    odom_trans.child_frame_id = "base_link";
-
-    odom_trans.transform.translation.x = x;
-    odom_trans.transform.translation.y = y;
-    odom_trans.transform.translation.z = 0.0;
-    odom_trans.transform.rotation = odom_quat;
-
-    //send the transform
-    odom_broadcaster.sendTransform(odom_trans);
-    */
 
     //next, we'll publish the odometry message over ROS
     nav_msgs::Odometry odom;
@@ -118,6 +115,9 @@ void update_odom()
     odom.child_frame_id = "base_link";
     odom.twist.twist.linear.x = vx;
     odom.twist.twist.linear.y = vy;
+    odom.twist.twist.linear.z = 0;
+    odom.twist.twist.angular.x = 0;
+    odom.twist.twist.angular.y = 0;
     odom.twist.twist.angular.z = vth;
 
     //Using small dummy values for the covariance matrix
@@ -137,6 +137,7 @@ void update_odom()
     odom_pub.publish(odom);
 
     last_time = current_time;
+    print_delay++;
 }
 
 int main(int argc, char **argv)
@@ -148,22 +149,21 @@ int main(int argc, char **argv)
     ros::Subscriber subInitialPose = n.subscribe("initial_2d", 1, set_initial_2d);
     ros::Subscriber subForEnc1Counts = n.subscribe("enc1_RPMs", 100, enc1_callback, ros::TransportHints().tcpNoDelay());
     ros::Subscriber subForEnc2Counts = n.subscribe("enc2_RPMs", 100, enc2_callback, ros::TransportHints().tcpNoDelay());
-    
-    tf::TransformBroadcaster odom_broadcaster;
 
     current_time = ros::Time::now();
     last_time = ros::Time::now();
 
-    ros::Rate r(30); //30 times per second
+    tf::TransformBroadcaster odom_broadcaster;
+
+    ros::Rate r(30); //15 times per second
 
     while(ros::ok())
     {
+        ros::spinOnce();
         if(initialPoseReceived)
         {
-            calc_vel();
             update_odom();
         }
-        ros::spinOnce();
         r.sleep();
     }
     return 0;

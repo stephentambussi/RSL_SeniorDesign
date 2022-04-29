@@ -4,10 +4,11 @@
 local_costmap:
   global_frame: odom #what coordinate frame the costmap should run
   robot_base_frame: base_link #coordinate frame for the base of the robot
-  update_frequency: 30.0 #Hz -- frequency at which update loop will run
-  publish_frequency: 30.0 #Hz -- frequency at which costmap will publish visualization info
+  update_frequency: 5.0 #Hz -- frequency at which update loop will run
+  publish_frequency: 5.0 #Hz -- frequency at which costmap will publish visualization info
   static_map: false #determines whether costmap should initialize itself based on preexisting map
   rolling_window: true #whether costmap will remain centered around robot as it moves through world
+  transform_tolerance: 1
   width: 5.0 #width of costmap
   height: 5.0 #height of costmap
   resolution: 0.1 #meters/cell -- should be same resolution as static map (but fine if not)
@@ -16,6 +17,6 @@ local_costmap:
     #TEMP to test nav stack without obstacle avoidance enabled
     #- {name: obstacle_layer, type: "costmap_2d::ObstacleLayer"}
 
-  #obstacle_layer:
-    #observation_sources: laser_scan_sensor
-    #laser_scan_sensor: {sensor_frame: laser, data_type: LaserScan, topic: scan, marking: true, clearing: true}
+  obstacle_layer:
+    observation_sources: laser_scan_sensor
+    laser_scan_sensor: {sensor_frame: laser, data_type: LaserScan, topic: scan, marking: true, clearing: true}

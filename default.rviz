@@ -8,6 +8,7 @@ Panels:
         - /Status1
         - /Grid1/Offset1
         - /Odometry1
+        - /Imu1/Status1
       Splitter Ratio: 0.5
     Tree Height: 781
   - Class: rviz/Selection
@@ -172,6 +173,95 @@ Visualization Manager:
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
+    - Alpha: 0.699999988079071
+      Class: rviz/Map
+      Color Scheme: map
+      Draw Behind: false
+      Enabled: true
+      Name: Global Costmap
+      Topic: /move_base/global_costmap/costmap
+      Unreliable: false
+      Use Timestamp: false
+      Value: true
+    - Alpha: 0.699999988079071
+      Class: rviz/Map
+      Color Scheme: map
+      Draw Behind: false
+      Enabled: true
+      Name: Local Costmap
+      Topic: /move_base/local_costmap/costmap
+      Unreliable: false
+      Use Timestamp: false
+      Value: true
+    - Alpha: 1
+      Buffer Length: 1
+      Class: rviz/Path
+      Color: 25; 255; 0
+      Enabled: true
+      Head Diameter: 0.30000001192092896
+      Head Length: 0.20000000298023224
+      Length: 0.30000001192092896
+      Line Style: Lines
+      Line Width: 0.029999999329447746
+      Name: Planner Plan
+      Offset:
+        X: 0
+        Y: 0
+        Z: 0
+      Pose Color: 255; 85; 255
+      Pose Style: None
+      Radius: 0.029999999329447746
+      Shaft Diameter: 0.10000000149011612
+      Shaft Length: 0.10000000149011612
+      Topic: /move_base/NavfnROS/plan
+      Unreliable: false
+      Value: true
+    - Alpha: 1
+      Class: rviz/Polygon
+      Color: 25; 255; 0
+      Enabled: true
+      Name: Robot Footprint
+      Topic: /move_base/local_costmap/footprint
+      Unreliable: false
+      Value: true
+    - Acceleration properties:
+        Acc. vector alpha: 1
+        Acc. vector color: 255; 0; 0
+        Acc. vector scale: 1
+        Derotate acceleration: true
+        Enable acceleration: false
+      Axes properties:
+        Axes scale: 1
+        Enable axes: true
+      Box properties:
+        Box alpha: 1
+        Box color: 255; 0; 0
+        Enable box: false
+        x_scale: 1
+        y_scale: 1
+        z_scale: 1
+      Class: rviz_imu_plugin/Imu
+      Enabled: true
+      Name: Imu
+      Topic: /zed2i/zed_node/imu/data
+      Unreliable: false
+      Value: true
+      fixed_frame_orientation: true
+    - Alpha: 1
+      Axes Length: 1
+      Axes Radius: 0.10000000149011612
+      Class: rviz/Pose
+      Color: 255; 25; 0
+      Enabled: true
+      Head Length: 0.30000001192092896
+      Head Radius: 0.10000000149011612
+      Name: Goal
+      Shaft Length: 1
+      Shaft Radius: 0.05000000074505806
+      Shape: Arrow
+      Topic: /goal_2d
+      Unreliable: false
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -207,9 +297,9 @@ Visualization Manager:
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0
-        Y: 0
-        Z: 0
+        X: 0.7787497043609619
+        Y: 1.2709954977035522
+        Z: -1.4493889808654785
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
