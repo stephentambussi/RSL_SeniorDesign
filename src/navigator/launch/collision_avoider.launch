@@ -1,0 +1,4 @@
+<launch>
+
+  <node pkg="navigator" name="coll_avoid" type="coll_avoid_node" output="screen"/>
+</launch>

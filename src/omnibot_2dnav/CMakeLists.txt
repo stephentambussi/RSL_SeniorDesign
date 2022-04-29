@@ -1,20 +1,21 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(navigator)
+project(omnibot_2dnav)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
-# add_compile_options(-std=c++11)
+add_compile_options(-std=c++11)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  tf
-  tf2
   geometry_msgs
-  std_msgs
+  move_base
+  nav_msgs
   roscpp
   rospy
-  zed_interfaces
+  sensor_msgs
+  std_msgs
+  tf
 )
 
 ## System dependencies are found with CMake's conventions
@@ -74,7 +75,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate added messages and services with any dependencies listed here
 # generate_messages(
 #   DEPENDENCIES
-#   std_msgs  # Or other packages containing msgs
+#   geometry_msgs#   nav_msgs#   sensor_msgs#   std_msgs
 # )
 
 ################################################
@@ -108,8 +109,8 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES navigator
-#  CATKIN_DEPENDS roscpp zed_interfaces
+#  LIBRARIES omnibot_2dnav
+#  CATKIN_DEPENDS geometry_msgs move_base nav_msgs roscpp rospy sensor_msgs std_msgs tf
 #  DEPENDS system_lib
 )
 
@@ -119,11 +120,14 @@ catkin_package(
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
-include_directories(include ${catkin_INCLUDE_DIRS})
+include_directories(
+# include
+  ${catkin_INCLUDE_DIRS}
+)
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/navigator.cpp
+#   src/${PROJECT_NAME}/omnibot_2dnav.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -134,21 +138,7 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-add_executable(follow_me_node src/follow_me_mode.cpp)
-add_executable(coll_avoid_node src/collisionNav.cpp)
-add_executable(odom_pub src/Odom2.cpp)
-add_executable(rviz_click_to_2d src/rviz_click_to_2d.cpp)
-#add_executable(speed_checker src/speed_checker.cpp)
-target_link_libraries(follow_me_node ${catkin_LIBRARIES})
-target_link_libraries(coll_avoid_node ${catkin_LIBRARIES})
-target_link_libraries(odom_pub ${catkin_LIBRARIES})
-target_link_libraries(rviz_click_to_2d ${catkin_LIBRARIES})
-#target_link_libraries(speed_checker ${catkin_LIBRARIES})
-add_dependencies(follow_me_node ${catkin_EXPORTED_TARGETS})
-add_dependencies(coll_avoid_node ${catkin_EXPORTED_TARGETS})
-add_dependencies(odom_pub ${catkin_EXPORTED_TARGETS})
-add_dependencies(rviz_click_to_2d ${catkin_EXPORTED_TARGETS})
-#add_dependencies(speed_checker ${catkin_EXPORTED_TARGETS})
+# add_executable(${PROJECT_NAME}_node src/omnibot_2dnav_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -212,7 +202,7 @@ add_dependencies(rviz_click_to_2d ${catkin_EXPORTED_TARGETS})
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_navigator.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_omnibot_2dnav.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
