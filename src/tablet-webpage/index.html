@@ -4,6 +4,7 @@
     <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
     <script type="text/javascript" src="js/roslib.min.js"></script>
     <script src="js/vue.js"></script>
+    <script type="text/javascript" src="js/mjpeg_stream.js"></script>
 
     <style type="text/css">
         #dragstartzone {
@@ -38,7 +39,7 @@
 
 <body>
     <div id="app" class="container">
-        <div class="jumbotron">
+        <div class="jumbotron text-center">
             <h1>ARC</h1>
         </div>
 
@@ -84,15 +85,15 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="card">
-                        <div class="card-body"></div>
-                        <h2 class="text-center">Manual Mode</h2>    
-                        <Button @click="" class="btn btn-danger" v-if="manualActive">Diactivate Manual Mode</Button>
-                        <Button @click="" class="btn btn-success" v-else>Activate Manual Mode</Button>
+                        <!-- <div class="card-body"> -->
+                            <h2 class="text-center">Manual Mode</h2>
+                            <Button @click="" class="btn btn-danger" v-if="manualActive">Diactivate Manual Mode</Button>
+                            <Button @click="autoActivate" class="btn btn-success" v-else>Activate Manual Mode</Button>
+                        <!-- </div> -->
                         <div class="card-body text-center">
                             <h2 class="text-center">Joystick</h2>
                             <hr>
-                            <p>Manual Control</p>
-                            <div id="dragstartzone" @mousedown="startDrag" @mousemove="doDrag">
+                            <div id="dragstartzone" @mousedown="startDrag" @mousemove="doDrag" @mouseup="stopDrag">
                             </div>
                             <div id="dragCircle" :style="dragCircleStyle"></div>
                         </div>
@@ -117,10 +118,15 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="card">
-                        <div class="card-body">
+                        <!-- <div class="card-body"> -->
                             <h2 class="text-center">Auto Mode</h2>
                             <hr />
-                            <p>Auto Mode is not implemented yet.</p>
+                            <button @click="" class="btn btn-danger" v-if="autoActive">Diactivate Auto Mode</button>
+                            <button @click="autoActivate" class="btn btn-success" v-else>Activate Auto Mode</button>
+                        <!-- </div> -->
+                        <div class="card-body">
+                            <button>ET go home</button>
+                            <button>ET go to point</button>
                         </div>
                     </div>
                 </div>
@@ -131,12 +137,16 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="card">
-                        <div class="card-body">
+                        <!-- <div class="card-body"> -->
                             <h2 class="text-center">Follow Mode</h2>
                             <hr />
-                            <p>Follow Mode is not implemented yet.</p>
-                        </div>
+                            <Button @click="" class="btn btn-danger" v-if="followActive">Diactivate Follow Mode</Button>
+                            <Button @click="followActivate" class="btn btn-success" v-else>Activate Follow Mode</Button>
+                        <!-- </div> -->
                     </div>
+                </div>
+                <div class="col-md-12 col-sm-6 text-center">
+                    <div id="divCamera"></div>
                 </div>
             </div>
         </div>

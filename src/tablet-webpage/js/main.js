@@ -27,6 +27,10 @@ var app = new Vue({
     },
     //publisher
     pubInterval: null,
+    //mode checks
+    manualActive: false,
+    followActive: false,
+    autoActive: false,
   },
   // helper methods to connect to ROS
   methods: {
@@ -40,7 +44,8 @@ var app = new Vue({
         this.connected = true;
         this.loading = false;
         this.logs.unshift("Connected to rosbridge server");
-        this.pubInterval = setInterval(this.joyPublish, 100)
+        this.pubInterval = setInterval(this.joyPublish, 100);
+        this.setCamera()
       });
       this.ros.on("error", (error) => {
         this.logs.unshift("Error connecting to rosbridge server");
@@ -48,61 +53,103 @@ var app = new Vue({
       this.ros.on("close", () => {
         this.connected = false;
         this.logs.unshift("Disconnected from rosbridge server");
-        clearInterval(this.pubInterval)
+        document.getElementById('divCamera').innerHTML = ''
+        clearInterval(this.pubInterval);
       });
     },
     disconnect: function () {
       this.ros.close();
     },
-    setTopic: function () {
-      this.topic = new ROSLIB.Topic({
-        ros: this.ros,
-        name: "/cmd_vel",
-        messageType: "geometry_msgs/Twist",
-      });
-    },
-    forward: function () {
-      this.message = new ROSLIB.Message({
-        linear: { x: 1, y: 0, z: 0 },
-        angular: { x: 0, y: 0, z: 0 },
-      });
-      this.setTopic();
-      this.topic.publish(this.message);
-    },
-    stop: function () {
-      this.message = new ROSLIB.Message({
-        linear: { x: 0, y: 0, z: 0 },
-        angular: { x: 0, y: 0, z: 0 },
-      });
-      this.setTopic();
-      this.topic.publish(this.message);
-    },
-    backward: function () {
-      this.message = new ROSLIB.Message({
-        linear: { x: -1, y: 0, z: 0 },
-        angular: { x: 0, y: 0, z: 0 },
-      });
-      this.setTopic();
-      this.topic.publish(this.message);
-    },
-    turnLeft: function () {
-      this.message = new ROSLIB.Message({
-        linear: { x: 0.5, y: 0, z: 0 },
-        angular: { x: 0, y: 0, z: 0.5 },
-      });
-      this.setTopic();
-      this.topic.publish(this.message);
-    },
-    turnRight: function () {
-      this.message = new ROSLIB.Message({
-        linear: { x: 0.5, y: 0, z: 0 },
-        angular: { x: 0, y: 0, z: -0.5 },
-      });
-      this.setTopic();
-      this.topic.publish(this.message);
-    },
+    // Old code for publishing joy commands before joystick existed
+    // setTopic: function () {
+    //   this.topic = new ROSLIB.Topic({
+    //     ros: this.ros,
+    //     name: "/cmd_vel",
+    //     messageType: "geometry_msgs/Twist",
+    //   });
+    // },
+    // forward: function () {
+    //   this.message = new ROSLIB.Message({
+    //     linear: { x: 1, y: 0, z: 0 },
+    //     angular: { x: 0, y: 0, z: 0 },
+    //   });
+    //   this.setTopic();
+    //   this.topic.publish(this.message);
+    // },
+    // stop: function () {
+    //   this.message = new ROSLIB.Message({
+    //     linear: { x: 0, y: 0, z: 0 },
+    //     angular: { x: 0, y: 0, z: 0 },
+    //   });
+    //   this.setTopic();
+    //   this.topic.publish(this.message);
+    // },
+    // backward: function () {
+    //   this.message = new ROSLIB.Message({
+    //     linear: { x: -1, y: 0, z: 0 },
+    //     angular: { x: 0, y: 0, z: 0 },
+    //   });
+    //   this.setTopic();
+    //   this.topic.publish(this.message);
+    // },
+    // turnLeft: function () {
+    //   this.message = new ROSLIB.Message({
+    //     linear: { x: 0.5, y: 0, z: 0 },
+    //     angular: { x: 0, y: 0, z: 0.5 },
+    //   });
+    //   this.setTopic();
+    //   this.topic.publish(this.message);
+    // },
+    // turnRight: function () {
+    //   this.message = new ROSLIB.Message({
+    //     linear: { x: 0.5, y: 0, z: 0 },
+    //     angular: { x: 0, y: 0, z: -0.5 },
+    //   });
+    //   this.setTopic();
+    //   this.topic.publish(this.message);
+    // },
     clearLogs: function () {
       this.logs = [];
+    },
+    //activate manual mode
+    manualActivate: function () {
+      let topic = new ROSLIB.Topic({
+        ros: this.ros,
+        name: "/manual_active",
+        messageType: "std_msgs/Bool",
+      });
+      let message = new ROSLIB.Message({
+        //idk
+      });
+      console.log("publishing manual active");
+      topic.publish(message);
+    },
+    //activate autonomous mode
+    autoActivate: function () {
+      let topic = new ROSLIB.Topic({
+        ros: this.ros,
+        name: "/auto_active",
+        messageType: "std_msgs/Bool",
+      });
+      let message = new ROSLIB.Message({
+        //idk
+      });
+      console.log("publishing auto active");
+      topic.publish(message);
+    },
+    //activate follow mode
+    followActivate: function () {
+      this.setCamera()
+      let topic = new ROSLIB.Topic({
+        ros: this.ros,
+        name: "/follow_active",
+        messageType: "std_msgs/Bool",
+      });
+      let message = new ROSLIB.Message({
+        //idk
+      });
+      console.log("publishing follow active");
+      topic.publish(message);
     },
     joyPublish: function () {
       let topic = new ROSLIB.Topic({
@@ -114,7 +161,7 @@ var app = new Vue({
         linear: { x: this.joystick.vertical, y: 0, z: 0 },
         angular: { x: 0, y: 0, z: this.joystick.horizontal },
       });
-      console.log('publish joy')
+      console.log("publish joy");
       topic.publish(message);
     },
     startDrag() {
@@ -150,13 +197,13 @@ var app = new Vue({
     setJoystickVals() {
       this.joystick.vertical = -1 * (this.y / 200 - 0.5);
       this.joystick.horizontal = -1 * (this.x / 200 - 0.5);
-      this.joyPublish()
+      this.joyPublish();
     },
     resetJoystickVals() {
       this.joystick.vertical = 0;
       this.joystick.horizontal = 0;
     },
-    openTab: function(evt, mode) {
+    openTab: function (evt, mode) {
       var i, tabcontent, tablinks;
       tabcontent = document.getElementsByClassName("tabcontent");
       for (i = 0; i < tabcontent.length; i++) {
@@ -168,6 +215,21 @@ var app = new Vue({
       }
       document.getElementById(mode).style.display = "block";
       evt.currentTarget.className += " active";
-    }
+    },
+    setCamera: function () {
+      let without_wss = this.rosbridge_address.split("wss://")[1];
+      console.log(without_wss);
+      let domain = without_wss.split("/")[0] + "/" + without_wss.split("/")[1];
+      console.log(domain);
+      let host = domain + "/cameras";
+      let viewer = new MJPEGCANVAS.Viewer({
+        divID: "divCamera",
+        host: host,
+        width: 320,
+        height: 240,
+        topic: "/camera/rgb/image_raw",
+        ssl: true,
+      });
+    },
   },
 });
