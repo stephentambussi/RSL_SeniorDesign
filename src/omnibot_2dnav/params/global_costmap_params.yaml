@@ -1,0 +1,9 @@
+#Config for global costmap: creating long-term plans over the entire environment
+
+global_costmap:
+  global_frame: /map #what coordinate frame the costmap should run
+  robot_base_frame: base_link #coordinate frame for the base of the robot
+  update_frequency: 5.0 #Hz -- frequency at which update loop will run
+  publish_frequency: 5.0
+  resolution: 0.05
+  static_map: true #determines whether costmap should initialize itself based on preexisting map
