@@ -100,7 +100,11 @@ Visualization Manager:
       Topic: /move_base/TrajectoryPlannerROS/global_plan
       Unreliable: false
       Value: true
+<<<<<<< HEAD
     - Angle Tolerance: 0
+=======
+    - Angle Tolerance: 0.10000000149011612
+>>>>>>> 56d4085cb602a85299077fe31713010e3069126a
       Class: rviz/Odometry
       Covariance:
         Orientation:
@@ -120,7 +124,11 @@ Visualization Manager:
       Enabled: true
       Keep: 1
       Name: Odometry
+<<<<<<< HEAD
       Position Tolerance: 0
+=======
+      Position Tolerance: 0.10000000149011612
+>>>>>>> 56d4085cb602a85299077fe31713010e3069126a
       Shape:
         Alpha: 1
         Axes Length: 1
@@ -131,7 +139,11 @@ Visualization Manager:
         Shaft Length: 1
         Shaft Radius: 0.05000000074505806
         Value: Arrow
+<<<<<<< HEAD
       Topic: /zed2i/zed_node/odom
+=======
+      Topic: /odom_data_quat
+>>>>>>> 56d4085cb602a85299077fe31713010e3069126a
       Unreliable: false
       Value: true
     - Alpha: 0.699999988079071
@@ -289,7 +301,11 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
+<<<<<<< HEAD
       Distance: 18.897754669189453
+=======
+      Distance: 21.474721908569336
+>>>>>>> 56d4085cb602a85299077fe31713010e3069126a
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
