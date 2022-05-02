@@ -19,7 +19,7 @@ def callback(Twist):
     pi = 3.14
     velocities = np.array([[Twist.linear.x], [Twist.linear.y], [Twist.angular.z]]) # taken from joystick in m/s
     vel_str = "Driver Node Velocities: x = " + str(Twist.linear.x) + " y = " + str(Twist.linear.y) + " theta = " + str(Twist.angular.z)
-    #print(vel_str)
+    print(vel_str)
     #----------defining wheel rotations based on velocites recieved for holonomic motion-------#
     
     # declaring robot wheel radius and distances of the wheels along x and y as l1 and l2

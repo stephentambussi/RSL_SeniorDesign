@@ -20,7 +20,7 @@ const double circum = 2 * M_PI * WHEEL_RADIUS; //get circumference of wheel (dis
 const double rpm_to_rad = 0.10472;
 
 //Flag to see if initial pose has been received
-bool initialPoseReceived = false;
+bool initialPoseReceived = true;
 
 ros::Time current_time, last_time;
 ros::Publisher odom_pub;
@@ -94,6 +94,7 @@ void update_odom()
     {
         cout << "Positions: x = " << x << " y = " << y << " theta = " << th << endl;
         cout << "Velocities: x = " << vx << " y = " << vy << " theta = " << vth << endl;
+        cout << "RPMS: m1 = " << rpms[0] << " m2 = " << rpms[1] << " m3 = " << rpms[2] << " m4 = " << rpms[3] << endl;
         print_delay = 0;
     }
 
@@ -138,6 +139,11 @@ void update_odom()
 
     last_time = current_time;
     print_delay++;
+    //Test
+    //rpms[0] = 0;
+    //rpms[1] = 0;
+    //rpms[2] = 0;
+    //rpms[3] = 0;
 }
 
 int main(int argc, char **argv)

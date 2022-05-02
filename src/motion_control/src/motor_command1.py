@@ -23,14 +23,21 @@ enc1_rpms = Int32MultiArray()
 enc1_rpms.data = [0, 0] #initialize
 
 def DriveUnit_1(val):
-	enc_query = "?S 1_?S 2_"
-
 	#print("Motor 1", val[0], "Motor 2", val[1],"Motor 3", val[2], "Motor 4", val[3])
 	payload1 = "!G 1 " + str(round(val[0])) + "_"  # chaged val[0] to 53
 	payload2 = "!G 2 " + str(round(val[1])) + "_"
 
 	ser_drive_unit_1.write(payload1)
 	ser_drive_unit_1.write(payload2)
+
+def callback(data):
+#	rospy.loginfo(data.data)
+	value_received = data.data
+#	print(value_received)
+	DriveUnit_1(value_received)
+
+def rpms_query():
+	enc_query = "?S 1_?S 2_"
 
 	#Publish RPMs of motor 1 (left side) for odom
 	ser_drive_unit_1.write(enc_query) #Motor 1,2 of encoder 1
@@ -48,12 +55,9 @@ def DriveUnit_1(val):
 	if count != 0:
 		#print(enc1_rpms.data)
 		publish_flag = 1
-
-def callback(data):
-#	rospy.loginfo(data.data)
-	value_received = data.data
-#	print(value_received)
-	DriveUnit_1(value_received)
+	#if publish_flag == 1:
+	pub.publish(enc1_rpms)
+	#publish_flag = 0
 
 def command_motors():
 	rospy.init_node('command_du_one', anonymous=True)
@@ -67,10 +71,7 @@ def command_motors():
 	#rospy.spin()
 
 	while not rospy.is_shutdown():
-		#TODO: test resetting enc1_rpms to 0 after publish
-		#if publish_flag == 1:
-		pub.publish(enc1_rpms)
-		#publish_flag = 0
+		rpms_query()
 		rate.sleep()
 
 if __name__ == '__main__':
