@@ -77,7 +77,7 @@
     <!-- Add AMCL example for omni drive robots for Localization -->
     <!-- Subscribe: /scan, /tf, /initialpose, /map -->
     <!-- Publish: /amcl_pose, /particlecloud, /tf -->
-    <include file="$(find amcl)/examples/amcl_omni.launch"/>
+    <!-- include file="$(find amcl)/examples/amcl_omni.launch"/ -->
 
     <!-- Move Base Node -->
     <!-- Subscribe: /move_base_simple/goal -->
@@ -86,7 +86,7 @@
         <rosparam file="$(find omnibot_2dnav)/params/costmap_common_params.yaml" command="load" ns="global_costmap" /> 
         <rosparam file="$(find omnibot_2dnav)/params/costmap_common_params.yaml" command="load" ns="local_costmap" />
         <rosparam file="$(find omnibot_2dnav)/params/local_costmap_params.yaml" command="load" ns="local_costmap" />
-        <rosparam file="$(find omnibot_2dnav)/params/global_costmap_params.yaml" command="load" ns="global_costmap" />
+        <rosparam file="$(find omnibot_2dnav)/params/global_costmap_params.yaml" command="load" ns="global_costmap" /> 
         <rosparam file="$(find omnibot_2dnav)/params/base_global_planner_params.yaml" command="load" />
         <rosparam file="$(find omnibot_2dnav)/params/base_local_planner_params.yaml" command="load" />
         <rosparam file="$(find omnibot_2dnav)/params/move_base_params.yaml" command="load" />

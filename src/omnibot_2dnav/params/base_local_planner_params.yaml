@@ -1,20 +1,18 @@
 #Config for base local planner -- responsible for computing velocity commands to send to base of robot
 
-TrajectoryPlannerROS:
+DWAPlannerROS:
   #define velocity limits of robot
   max_vel_x: 0.1
   min_vel_x: 0.05
   max_vel_y: 0.1
   min_vel_y: 0.05
   max_vel_theta: 0.1
-  max_in_place_vel_theta: 0.1
-  min_in_place_vel_theta: 0.05
+  min_vel_theta: 0.05
 
   #define acceleration limits of robot
-  acc_lim_theta: 1
+  acc_lim_th: 1
   acc_lim_x: 1
   acc_lim_y: 1
 
-  holonomic_robot: true
-  yaw_goal_tolerance: 2
-  xy_goal_tolerance: 2
+  yaw_goal_tolerance: 0.5
+  xy_goal_tolerance: 0.5
