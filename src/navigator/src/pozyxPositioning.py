@@ -18,40 +18,35 @@ timeout=1
 )
 
 
-def findPozyxValues(val):
-    #Find and publish coordinates
-    #Turn into Int32MultiArray
-    #3D coordinates?
+def findPozyxValues():
+    data = serial_arduino.read()
+    whichnum = 0
+    flag = 0
+    nums = ["","","","",""]
+    for char in data:
+        if char.isdigit() or char == '-':
+            nums[whichnum] = nums[whichnum] + char
+            flag = 1
+        else:
+            if flag == 1:
+                whichnum = whichnum + 1
+            flag = 0
+    if nums[4] != "":
+        coords = [nums[2],nums[3]]
+        return(coords)
 
 
-def callback(data):
-    value_received = data.data
-    findPozyxValues(value_received)
+def callback():
+    coords = findPozyxValues()
+    #switch coords to Float32MultiArray
+    pub.publish(coords)
 
 def sendPozyxValues():
     global pub
-    pub = rospy.Publisher(#types of values published)
-    rospy.Subscriber("xy_coords",Int16MultiArray,callback)
-    pub.publish(#Values)
-    rospy.spin()
-
-
-    def start():
-    rospy.init_node('Joy2Turtle')        # publishing to "turtle1/cmd_vel" to control turtle1
-    global pub
-    pub = rospy.Publisher('command_du_one', Int16MultiArray, queue_size=10)
-                # subscribed to joystick inputs on topic "joy"
-    rospy.Subscriber("zed_vel1", Float32MultiArray, callback)
-                # starts the node
+    pub = rospy.Publisher('coordinates',Float32MultiArray,queue_size=10)
     
     rospy.spin()
 
 
 if __name__ == '__main__':
     sendPozyxValues()
-
-#count = 0
-#for n in rpm:
-#    if(n[0] == "S"):
-#        ret[count] = n[2:]
-#        count+=1
