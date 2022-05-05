@@ -10,7 +10,6 @@ subscribe_to_updates: true
 update_frequency: 5.0
 publish_frequency: 5.0
 transform_tolerance: 0.5
-rolling_window: false
 
 plugins:
   - {name: static_layer, type: "costmap_2d::StaticLayer"}
