@@ -28,19 +28,20 @@ void pozyx_callback(const std_msgs::Float32MultiArray& coords)
     geometry_msgs::TransformStamped odom_trans;
     odom_trans.header.stamp = current_time;
     odom_trans.header.frame_id = "odom";
-    odom_trans.child_frame_id = "base_link"; //TODO: check transform
+    odom_trans.child_frame_id = "base_footprint"; //TODO: check transform
 
     odom_trans.transform.translation.x = x;
     odom_trans.transform.translation.y = y;
     odom_trans.transform.translation.z = 0.0;
     odom_trans.transform.rotation = odom_quat;
 
-    //send transform
+    //send transform -- TEST
     odom_broadcaster.sendTransform(odom_trans);
 
     nav_msgs::Odometry odom;
     odom.header.stamp = current_time;
-    odom.header.frame_id = "base_footprint"; //TODO: check this
+    odom.header.frame_id = "odom"; //TODO: check this
+    odom.child_frame_id = "base_footprint";
 
     odom.pose.pose.position.x = x;
     odom.pose.pose.position.y = y;

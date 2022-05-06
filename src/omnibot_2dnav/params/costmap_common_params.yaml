@@ -14,7 +14,7 @@ transform_tolerance: 0.5
 plugins:
   - {name: static_layer, type: "costmap_2d::StaticLayer"}
   - {name: inflation_layer, type: "costmap_2d::InflationLayer"}
-  #- {name: obstacle_layer, type: "costmap_2d::ObstacleLayer"}
+  - {name: obstacle_layer, type: "costmap_2d::ObstacleLayer"}
 
 static_layer:
   map_topic: /map
