@@ -44,7 +44,8 @@ var app = new Vue({
         this.connected = true;
         this.loading = false;
         this.logs.unshift("Connected to rosbridge server");
-        this.pubInterval = setInterval(this.joyPublish, 100);
+        this.pubInterval = setInterval(this.manualActivate, 100);
+
         this.setCamera()
       });
       this.ros.on("error", (error) => {

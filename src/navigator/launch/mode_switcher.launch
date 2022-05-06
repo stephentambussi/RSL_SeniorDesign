@@ -1,0 +1,4 @@
+<launch>
+
+  <node pkg="navigator" name="mode_switcher" type="mode_switcher.py" output="screen"/>
+</launch>
