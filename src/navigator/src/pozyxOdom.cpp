@@ -9,33 +9,66 @@ double x = 0.0;
 double y = 0.0;
 double th = 0.0;
 
+ros::Time current_time, last_time;
+ros::Publisher odom_pub;
+
 using namespace std;
+
+void pozyx_callback(const std_msgs::Float32MultiArray& coords)
+{
+    tf::TransformBroadcaster odom_broadcaster;
+    current_time = ros::Time::now();
+
+    x = coords.data[0];
+    y = coords.data[1];
+
+    geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(th); //TODO: see if you should change this or not
+
+    //publish transform over tf
+    geometry_msgs::TransformStamped odom_trans;
+    odom_trans.header.stamp = current_time;
+    odom_trans.header.frame_id = "odom";
+    odom_trans.child_frame_id = "base_link"; //TODO: check transform
+
+    odom_trans.transform.translation.x = x;
+    odom_trans.transform.translation.y = y;
+    odom_trans.transform.translation.z = 0.0;
+    odom_trans.transform.rotation = odom_quat;
+
+    //send transform
+    odom_broadcaster.sendTransform(odom_trans);
+
+    nav_msgs::Odometry odom;
+    odom.header.stamp = current_time;
+    odom.header.frame_id = "base_footprint"; //TODO: check this
+
+    odom.pose.pose.position.x = x;
+    odom.pose.pose.position.y = y;
+    odom.pose.pose.position.z = 0.0;
+    odom.pose.pose.orientation = odom_quat;
+
+    odom.pose.covariance = {0.01, 0, 0, 0, 0, 0,  // covariance on gps_x
+                            0, 0.01, 0, 0, 0, 0,  // covariance on gps_y
+                            0, 0, 0.01, 0, 0, 0,  // covariance on gps_z
+                            0, 0, 0, 99999, 0, 0,  // large covariance on rot x
+                            0, 0, 0, 0, 99999, 0,  // large covariance on rot y
+                            0, 0, 0, 0, 0, 99999}  // large covariance on rot z
+    odom_pub.publish(odom);
+    last_time = current_time;
+}
 
 int main(int argc, char **argv)
 {
-    ros::init(argc, argv, "odom_pub");
+    ros::init(argc, argv, "pozyx_gps");
 
     ros::NodeHandle n;
-    odom_pub = n.advertise<nav_msgs::Odometry>("odom_data_quat", 100);
-    ros::Subscriber subInitialPose = n.subscribe("initial_2d", 1, set_initial_2d);
-    ros::Subscriber subForEnc1Counts = n.subscribe("enc1_RPMs", 100, enc1_callback, ros::TransportHints().tcpNoDelay());
-    ros::Subscriber subForEnc2Counts = n.subscribe("enc2_RPMs", 100, enc2_callback, ros::TransportHints().tcpNoDelay());
+    odom_pub = n.advertise<nav_msgs::Odometry>("pozyx_gps_data", 100);
+    ros::Subscriber subForPozyx = n.subscribe("coordinates", 100, pozyx_callback);
 
     current_time = ros::Time::now();
     last_time = ros::Time::now();
 
-    tf::TransformBroadcaster odom_broadcaster;
+    ros::spin();
 
-    ros::Rate r(30); //15 times per second
-
-    while(ros::ok())
-    {
-        ros::spinOnce();
-        if(initialPoseReceived)
-        {
-            update_odom();
-        }
-        r.sleep();
-    }
     return 0;
 }
