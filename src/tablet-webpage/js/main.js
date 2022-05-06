@@ -123,6 +123,7 @@ var app = new Vue({
       });
       console.log("publishing manual active");
       topic.publish(message);
+      console.log(message)
     },
     //activate autonomous mode
     autoActivate: function () {
@@ -136,6 +137,7 @@ var app = new Vue({
       });
       console.log("publishing auto active");
       topic.publish(message);
+      console.log(message)
     },
     //activate follow mode
     followActivate: function () {
@@ -163,6 +165,7 @@ var app = new Vue({
       });
       console.log("publish joy");
       topic.publish(message);
+      console.log(message)
     },
     startDrag() {
       this.dragging = true;

@@ -1,7 +1,5 @@
 <launch>
 
-<node name="driver_node" pkg="motion_control" type="driver.py" />
-<node name="roboteq1_node" pkg="motion_control" type="motor_command1.py" />
-<node name="roboteq2_node" pkg="motion_control" type="motor_command2.py" />
-
+    <include file="$(find zed_wrapper)/launch/zed2i.launch"/>
+    <include file="$(find teleop_twist_joy)/launch/teleop.launch"/>
 </launch>
