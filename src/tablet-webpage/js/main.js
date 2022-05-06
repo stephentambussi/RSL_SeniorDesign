@@ -116,7 +116,7 @@ var app = new Vue({
       let topic = new ROSLIB.Topic({
         ros: this.ros,
         name: "/start_mode",
-        messageType: "int16",
+        messageType: "std_msgs/Int16",
       });
       let message = new ROSLIB.Message({
         mode: 0
@@ -130,7 +130,7 @@ var app = new Vue({
       let topic = new ROSLIB.Topic({
         ros: this.ros,
         name: "/start_mode",
-        messageType: "int16",
+        messageType: "std_msgs/Int16",
       });
       let message = new ROSLIB.Message({
         mode: 1
@@ -145,7 +145,7 @@ var app = new Vue({
       let topic = new ROSLIB.Topic({
         ros: this.ros,
         name: "/start_mode",
-        messageType: "int16",
+        messageType: "std_msgs/Int16",
       });
       let message = new ROSLIB.Message({
         mode: 2
