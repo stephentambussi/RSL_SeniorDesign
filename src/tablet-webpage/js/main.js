@@ -115,11 +115,11 @@ var app = new Vue({
     manualActivate: function () {
       let topic = new ROSLIB.Topic({
         ros: this.ros,
-        name: "/manual_active",
-        messageType: "std_msgs/Bool",
+        name: "/start_mode",
+        messageType: "int16",
       });
       let message = new ROSLIB.Message({
-        //idk
+        mode: 0
       });
       console.log("publishing manual active");
       topic.publish(message);
@@ -128,11 +128,11 @@ var app = new Vue({
     autoActivate: function () {
       let topic = new ROSLIB.Topic({
         ros: this.ros,
-        name: "/auto_active",
-        messageType: "std_msgs/Bool",
+        name: "/start_mode",
+        messageType: "int16",
       });
       let message = new ROSLIB.Message({
-        //idk
+        mode: 1
       });
       console.log("publishing auto active");
       topic.publish(message);
@@ -142,11 +142,11 @@ var app = new Vue({
       this.setCamera()
       let topic = new ROSLIB.Topic({
         ros: this.ros,
-        name: "/follow_active",
-        messageType: "std_msgs/Bool",
+        name: "/start_mode",
+        messageType: "int16",
       });
       let message = new ROSLIB.Message({
-        //idk
+        mode: 2
       });
       console.log("publishing follow active");
       topic.publish(message);
@@ -224,7 +224,7 @@ var app = new Vue({
       // let host = domain + "/cameras";
       let viewer = new MJPEGCANVAS.Viewer({
         divID: "divCamera",
-        host: 'localhost:8080',
+        host: 'localhost',
         width: 320,
         height: 240,
         topic: "/zed2i/zed_node/rgb/image_rect_color",

@@ -4,7 +4,8 @@
     <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
     <script type="text/javascript" src="js/roslib.min.js"></script>
     <script src="js/vue.js"></script>
-    <script type="text/javascript" src="js/mjpegcanvas.min.js"></script>
+    <script type="text/javascript" src="js/mjpegcanvas.js"></script>
+    
 
     <style type="text/css">
         #dragstartzone {
@@ -37,7 +38,7 @@
     </style>
 </head>
 
-<body>
+<body onload="setupCamera()">
     <div id="app" class="container">
         <div class="jumbotron text-center">
             <h1>ARC</h1>
@@ -112,6 +113,11 @@
                         <div id="divCamera"></div>
                     </div>
                 </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <iframe src="http://localhost:8080/stream_viewer?topic=/zed2i/zed_node/rgb/image_rect_color" height=500 width=660></iframe>
+                    </div>
+                </div>
             </div>
         </div>
         <!-- Auto Mode -->
@@ -131,6 +137,11 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <iframe src="http://localhost:8080/stream_viewer?topic=/zed2i/zed_node/rgb/image_rect_color" height=500 width=660></iframe>
+                    </div>
+                </div>
             </div>
         </div>
         <!-- Follow Mode -->
@@ -146,8 +157,10 @@
                         <!-- </div> -->
                     </div>
                 </div>
-                <div class="col-md-12 col-sm-6 text-center">
-                    <div id="divCamera"></div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <iframe src="http://localhost:8080/stream_viewer?topic=/zed2i/zed_node/rgb/image_rect_color" height=500 width=660></iframe>
+                    </div>
                 </div>
             </div>
         </div>
