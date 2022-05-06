@@ -52,7 +52,7 @@ void pozyx_callback(const std_msgs::Float32MultiArray& coords)
                             0, 0, 0.01, 0, 0, 0,  // covariance on gps_z
                             0, 0, 0, 99999, 0, 0,  // large covariance on rot x
                             0, 0, 0, 0, 99999, 0,  // large covariance on rot y
-                            0, 0, 0, 0, 0, 99999}  // large covariance on rot z
+                            0, 0, 0, 0, 0, 99999};  // large covariance on rot z
     odom_pub.publish(odom);
     last_time = current_time;
 }
