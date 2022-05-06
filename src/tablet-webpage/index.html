@@ -1,0 +1,174 @@
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <script type="text/javascript" src="js/roslib.min.js"></script>
+    <script src="js/vue.js"></script>
+    <script type="text/javascript" src="js/mjpegcanvas.js"></script>
+    
+
+    <style type="text/css">
+        #dragstartzone {
+            position: relative;
+            display: inline-block;
+            width: 200px;
+            height: 200px;
+            border: 1px solid #333;
+            border-radius: 50%;
+            z-index: 10;
+            -moz-user-select: -moz-none;
+            -khtml-user-select: none;
+            -webkit-user-select: none;
+        }
+
+        #dragCircle {
+            position: absolute;
+            z-index: 9;
+            border: 1px solid transparent;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 30%);
+            -moz-user-select: -moz-none;
+            -khtml-user-select: none;
+            -webkit-user-select: none;
+        }
+
+        #dragCircle:hover {
+            background-color: lightcoral;
+        }
+    </style>
+</head>
+
+<body onload="setupCamera()">
+    <div id="app" class="container">
+        <div class="jumbotron text-center">
+            <h1>ARC</h1>
+        </div>
+
+        <div class="row" style="max-height:200px;">
+            <div class="col-md-6">
+                <h3>Connection Status</h3>
+
+                <p class="text-success" v-if="connected">Connected!</p>
+                <p class="text-danger" v-else>Not Connected!</p>
+
+                <label>Websocket server address</label>
+                <input type="text" v-model='ws_address' />
+                <br />
+                <button @click="disconnect" class="btn btn-danger" v-if="connected">Disconnect</button>
+                <button @click="connect" class="btn btn-success" v-else>Connect</button>
+            </div>
+            <div class="col-md-6" style="max-height:200px; overflow:auto">
+                <h3>Log messages</h3>
+                <div>
+                    <p v-for="log in logs">
+                        {{log}}
+                    </p>
+                </div>
+                <button @click="clearLogs">Clear Logs</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h5>Commands</h5>
+            </div>
+        </div>
+        <!-- Tab Links -->
+        <div class="tabs text-center">
+            <button class="tablinks" @click="openTab(event, 'manual')">Manual</button>
+            <button class="tablinks" @click="openTab(event, 'auto')">Auto</button>
+            <button class="tablinks" @click="openTab(event, 'follow')">Follow</button>
+        </div>
+
+        <!-- Tab content -->
+        <!-- Manual Mode -->
+        <div id="manual" class="tabcontent">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <!-- <div class="card-body"> -->
+                            <h2 class="text-center">Manual Mode</h2>
+                            <Button @click="" class="btn btn-danger" v-if="manualActive">Diactivate Manual Mode</Button>
+                            <Button @click="autoActivate" class="btn btn-success" v-else>Activate Manual Mode</Button>
+                        <!-- </div> -->
+                        <div class="card-body text-center">
+                            <h2 class="text-center">Joystick</h2>
+                            <hr>
+                            <div id="dragstartzone" @mousedown="startDrag" @mousemove="doDrag" @mouseup="stopDrag">
+                            </div>
+                            <div id="dragCircle" :style="dragCircleStyle"></div>
+                        </div>
+                    </div>
+                    <button @click="stopDrag" class="btn btn-danger">Stop joystick</button>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="text-center">Joystick values</h2>
+                            <hr />
+                            <p>Vertical: {{ joystick.vertical.toFixed(3) }}</p>
+                            <br />
+                            <p>Horizontal: {{ joystick.horizontal.toFixed(3) }}</p>
+                        </div>
+                        <div id="divCamera"></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <iframe src="http://localhost:8080/stream_viewer?topic=/zed2i/zed_node/rgb/image_rect_color" height=500 width=660></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Auto Mode -->
+        <div id="auto" class="tabcontent">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <!-- <div class="card-body"> -->
+                            <h2 class="text-center">Auto Mode</h2>
+                            <hr />
+                            <button @click="" class="btn btn-danger" v-if="autoActive">Diactivate Auto Mode</button>
+                            <button @click="autoActivate" class="btn btn-success" v-else>Activate Auto Mode</button>
+                        <!-- </div> -->
+                        <div class="card-body">
+                            <button>ET go home</button>
+                            <button>ET go to point</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <iframe src="http://localhost:8080/stream_viewer?topic=/zed2i/zed_node/rgb/image_rect_color" height=500 width=660></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Follow Mode -->
+        <div id="follow" class="tabcontent">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <!-- <div class="card-body"> -->
+                            <h2 class="text-center">Follow Mode</h2>
+                            <hr />
+                            <Button @click="" class="btn btn-danger" v-if="followActive">Diactivate Follow Mode</Button>
+                            <Button @click="followActivate" class="btn btn-success" v-else>Activate Follow Mode</Button>
+                        <!-- </div> -->
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <iframe src="http://localhost:8080/stream_viewer?topic=/zed2i/zed_node/rgb/image_rect_color" height=500 width=660></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" href="js/bootstrap.min.js"></script>
+</body>
+
+</html>
