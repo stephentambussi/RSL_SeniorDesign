@@ -44,7 +44,7 @@ var app = new Vue({
         this.connected = true;
         this.loading = false;
         this.logs.unshift("Connected to rosbridge server");
-        this.pubInterval = setInterval(this.manualActivate, 100);
+        this.pubInterval = setInterval(this.joyPublish, 100);
 
         this.setCamera()
       });
@@ -119,9 +119,7 @@ var app = new Vue({
         name: "/start_mode",
         messageType: "std_msgs/Int16",
       });
-      let message = new ROSLIB.Message({
-        mode: 0
-      });
+      let message = new ROSLIB.Message(0);
       console.log("publishing manual active");
       topic.publish(message);
       console.log(message)
@@ -133,9 +131,7 @@ var app = new Vue({
         name: "/start_mode",
         messageType: "std_msgs/Int16",
       });
-      let message = new ROSLIB.Message({
-        mode: 1
-      });
+      let message = new ROSLIB.Message(1);
       console.log("publishing auto active");
       topic.publish(message);
       console.log(message)
@@ -148,9 +144,7 @@ var app = new Vue({
         name: "/start_mode",
         messageType: "std_msgs/Int16",
       });
-      let message = new ROSLIB.Message({
-        mode: 2
-      });
+      let message = new ROSLIB.Message(2);
       console.log("publishing follow active");
       topic.publish(message);
     },
