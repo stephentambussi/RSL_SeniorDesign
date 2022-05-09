@@ -31,6 +31,7 @@ var app = new Vue({
     manualActive: false,
     followActive: false,
     autoActive: false,
+    joyActive: false,
   },
   // helper methods to connect to ROS
   methods: {
@@ -213,21 +214,6 @@ var app = new Vue({
       }
       document.getElementById(mode).style.display = "block";
       evt.currentTarget.className += " active";
-    },
-    setCamera: function () {
-      // let without_wss = this.rosbridge_address.split("wss://")[1];
-      // console.log(without_wss);
-      // let domain = without_wss.split("/")[0] + "/" + without_wss.split("/")[1];
-      // console.log(domain);
-      // let host = domain + "/cameras";
-      let viewer = new MJPEGCANVAS.Viewer({
-        divID: "divCamera",
-        host: 'localhost',
-        width: 320,
-        height: 240,
-        topic: "/zed2i/zed_node/rgb/image_rect_color",
-        ssl: false,
-      });
     },
   },
 });

@@ -5,7 +5,7 @@
     <script type="text/javascript" src="js/roslib.min.js"></script>
     <script src="js/vue.js"></script>
     <script type="text/javascript" src="js/mjpegcanvas.js"></script>
-    
+
 
     <style type="text/css">
         #dragstartzone {
@@ -87,17 +87,33 @@
                 <div class="col-md-4">
                     <div class="card">
                         <!-- <div class="card-body"> -->
-                            <h2 class="text-center">Manual Mode</h2>
-                            <Button @click="" class="btn btn-danger" v-if="manualActive">Diactivate Manual Mode</Button>
-                            <Button @click="manualActivate" class="btn btn-success" v-else>Activate Manual Mode</Button>
+                        <h2 class="text-center">Manual Mode</h2>
+                        <Button @click="" class="btn btn-danger" v-if="manualActive">Diactivate Manual Mode</Button>
+                        <Button @click="manualActivate" class="btn btn-success" v-else>Activate Manual Mode</Button>
                         <!-- </div> -->
                         <div class="card-body text-center">
                             <h2 class="text-center">Joystick</h2>
                             <hr>
-                            <div id="dragstartzone" @mousedown="startDrag" @mousemove="doDrag" @mouseup="stopDrag">
+                            <!-- <div id="dragstartzone"  @touchstart="startDrag" @touchmove="doDrag" @mousedown="startDrag" @mousemove="doDrag" @mouseup="stopDrag">
                             </div>
-                            <div id="dragCircle" :style="dragCircleStyle"></div>
+                            <div id="dragCircle" :style="dragCircleStyle"></div> -->
+                            <div
+                                style="border: 1px solid blue; width: 128px; ">
+                                <img src="images/joystick-base.png" />
+                                <div id="stick" style="position: absolute; left:53px; top:208px">
+                                    <img src="images/joystick-blue.png" />
+                                </div>
+                            </div>
                         </div>
+                        <!-- <div class="card-body text-center">
+                            <div
+                                style="border: 1px solid blue; width: 128px; position: absolute; left:210px; top:150px;">
+                                <img src="images/joystick-base.png" />
+                                <div id="stick" style="position: absolute; left:32px; top:32px;">
+                                    <img src="images/joystick-blue.png" />
+                                </div>
+                            </div>
+                        </div> -->
                     </div>
                     <button @click="stopDrag" class="btn btn-danger">Stop joystick</button>
                 </div>
@@ -115,7 +131,8 @@
                 </div>
                 <div class="col-md-4">
                     <div class="card">
-                        <iframe src="http://localhost:8080/stream_viewer?topic=/zed2i/zed_node/rgb/image_rect_color" height=500 width=660></iframe>
+                        <iframe src="http://localhost:8080/stream_viewer?topic=/zed2i/zed_node/rgb/image_rect_color"
+                            height=500 width=660></iframe>
                     </div>
                 </div>
             </div>
@@ -126,10 +143,10 @@
                 <div class="col-md-4">
                     <div class="card">
                         <!-- <div class="card-body"> -->
-                            <h2 class="text-center">Auto Mode</h2>
-                            <hr />
-                            <button @click="" class="btn btn-danger" v-if="autoActive">Diactivate Auto Mode</button>
-                            <button @click="autoActivate" class="btn btn-success" v-else>Activate Auto Mode</button>
+                        <h2 class="text-center">Auto Mode</h2>
+                        <hr />
+                        <button @click="" class="btn btn-danger" v-if="autoActive">Diactivate Auto Mode</button>
+                        <button @click="autoActivate" class="btn btn-success" v-else>Activate Auto Mode</button>
                         <!-- </div> -->
                         <div class="card-body">
                             <button>ET go home</button>
@@ -139,7 +156,8 @@
                 </div>
                 <div class="col-md-4">
                     <div class="card">
-                        <iframe src="http://localhost:8080/stream_viewer?topic=/zed2i/zed_node/rgb/image_rect_color" height=500 width=660></iframe>
+                        <iframe src="http://localhost:8080/stream_viewer?topic=/zed2i/zed_node/rgb/image_rect_color"
+                            height=500 width=660></iframe>
                     </div>
                 </div>
             </div>
@@ -150,21 +168,163 @@
                 <div class="col-md-4">
                     <div class="card">
                         <!-- <div class="card-body"> -->
-                            <h2 class="text-center">Follow Mode</h2>
-                            <hr />
-                            <Button @click="" class="btn btn-danger" v-if="followActive">Diactivate Follow Mode</Button>
-                            <Button @click="followActivate" class="btn btn-success" v-else>Activate Follow Mode</Button>
+                        <h2 class="text-center">Follow Mode</h2>
+                        <hr />
+                        <Button @click="" class="btn btn-danger" v-if="followActive">Diactivate Follow Mode</Button>
+                        <Button @click="followActivate" class="btn btn-success" v-else>Activate Follow Mode</Button>
                         <!-- </div> -->
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="card">
-                        <iframe src="http://localhost:8080/stream_viewer?topic=/zed2i/zed_node/rgb/image_rect_color" height=500 width=660></iframe>
+                        <iframe src="http://localhost:8080/stream_viewer?topic=/zed2i/zed_node/rgb/image_rect_color"
+                            height=500 width=660></iframe>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+
+    <script>
+
+        class JoystickController {
+            // stickID: ID of HTML element (representing joystick) that will be dragged
+            // maxDistance: maximum amount joystick can move in any direction
+            // deadzone: joystick must move at least this amount from origin to register value change
+            constructor(stickID, maxDistance, deadzone) {
+                this.id = stickID;
+                let stick = document.getElementById(stickID);
+
+                // location from which drag begins, used to calculate offsets
+                this.dragStart = null;
+
+                // track touch identifier in case multiple joysticks present
+                this.touchId = null;
+
+                this.active = false;
+                this.value = { x: 0, y: 0 };
+
+                let self = this;
+
+                function handleDown(event) {
+                    self.active = true;
+
+                    // all drag movements are instantaneous
+                    stick.style.transition = '0s';
+
+                    // touch event fired before mouse event; prevent redundant mouse event from firing
+                    event.preventDefault();
+
+                    if (event.changedTouches)
+                        self.dragStart = { x: event.changedTouches[0].clientX, y: event.changedTouches[0].clientY };
+                    else
+                        self.dragStart = { x: event.clientX, y: event.clientY };
+
+                    // if this is a touch event, keep track of which one
+                    if (event.changedTouches)
+                        self.touchId = event.changedTouches[0].identifier;
+                }
+
+                function handleMove(event) {
+                    if (!self.active) return;
+
+                    // if this is a touch event, make sure it is the right one
+                    // also handle multiple simultaneous touchmove events
+                    let touchmoveId = null;
+                    if (event.changedTouches) {
+                        for (let i = 0; i < event.changedTouches.length; i++) {
+                            if (self.touchId == event.changedTouches[i].identifier) {
+                                touchmoveId = i;
+                                event.clientX = event.changedTouches[i].clientX;
+                                event.clientY = event.changedTouches[i].clientY;
+                            }
+                        }
+
+                        if (touchmoveId == null) return;
+                    }
+
+                    const xDiff = event.clientX - self.dragStart.x;
+                    const yDiff = event.clientY - self.dragStart.y;
+                    const angle = Math.atan2(yDiff, xDiff);
+                    const distance = Math.min(maxDistance, Math.hypot(xDiff, yDiff));
+                    const xPosition = distance * Math.cos(angle);
+                    const yPosition = distance * Math.sin(angle);
+
+                    // move stick image to new position
+                    stick.style.transform = `translate3d(${xPosition}px, ${yPosition}px, 0px)`;
+
+                    // deadzone adjustment
+                    const distance2 = (distance < deadzone) ? 0 : maxDistance / (maxDistance - deadzone) * (distance - deadzone);
+                    const xPosition2 = distance2 * Math.cos(angle);
+                    const yPosition2 = distance2 * Math.sin(angle);
+                    const xPercent = parseFloat((xPosition2 / maxDistance).toFixed(4));
+                    const yPercent = parseFloat((yPosition2 / maxDistance).toFixed(4));
+
+
+
+                    self.value = { x: xPercent, y: yPercent };
+                }
+
+                function handleUp(event) {
+                    if (!self.active) return;
+
+                    // if this is a touch event, make sure it is the right one
+                    if (event.changedTouches && self.touchId != event.changedTouches[0].identifier) return;
+
+                    // transition the joystick position back to center
+                    stick.style.transition = '.2s';
+                    stick.style.transform = `translate3d(0px, 0px, 0px)`;
+
+                    // reset everything
+                    self.value = { x: 0, y: 0 };
+                    self.touchId = null;
+                    self.active = false;
+                }
+
+                stick.addEventListener('mousedown', handleDown);
+                stick.addEventListener('touchstart', handleDown);
+                document.addEventListener('mousemove', handleMove, { passive: false }, joyPublish);
+                document.addEventListener('touchmove', handleMove, { passive: false }, joyPublish);
+                document.addEventListener('mouseup', handleUp);
+                document.addEventListener('touchend', handleUp);
+            }
+        }
+
+        let joystick1 = new JoystickController("stick", 64, 8);
+
+        function update() {
+            document.getElementById("status1").innerText = "Joystick 1: " + JSON.stringify(joystick1.value);
+        }
+
+        function joyPublish() {
+            let ros = new ROSLIB.Ros({
+                url: 'ws://localhost:9090'
+            })
+            let topic = new ROSLIB.Topic({
+                ros: this.ros,
+                name: 'cmd_vel',
+                messageType: 'geometry_msgs/Twist'
+            })
+            let message = new ROSLIB.Message({
+                linear: { x: joystick1.value.x, y: 0, z: 0 },
+                angular: { x: 0, y: joystick1.value.y, z: 0 }
+            })
+            // debugger
+            console.log(message)
+            topic.publish(message)
+            console.log(message)
+        }
+
+        function loop() {
+            requestAnimationFrame(loop);
+            // update();
+            joyPublish();
+        }
+
+        loop();
+
+    </script>
 
 
     <script type="text/javascript" src="js/main.js"></script>
