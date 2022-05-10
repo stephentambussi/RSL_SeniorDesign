@@ -36,7 +36,7 @@ void pozyx_callback(const std_msgs::Float32MultiArray& coords)
     odom_trans.transform.rotation = odom_quat;
 
     //send transform -- TEST
-    odom_broadcaster.sendTransform(odom_trans);
+    //odom_broadcaster.sendTransform(odom_trans);
 
     nav_msgs::Odometry odom;
     odom.header.stamp = current_time;
