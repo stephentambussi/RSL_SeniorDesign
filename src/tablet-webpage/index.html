@@ -188,10 +188,6 @@
             // deadzone: joystick must move at least this amount from origin to register value change
             constructor(stickID, maxDistance, deadzone) {
 
-                this.ros = new ROSLIB.Ros({
-                        url: 'ws://127.20.8.6:9090',
-                    })
-
                 this.id = stickID;
                 let stick = document.getElementById(stickID);
 
@@ -228,9 +224,12 @@
 
 
                 function joyPublish(xval, yval) {
-            
+
+                    let ros = new ROSLIB.Ros({
+                        url: 'ws://127.20.8.6:9090',
+                    })
                     let topic = new ROSLIB.Topic({
-                        ros: this.ros,
+                        ros: ros,
                         name: 'cmd_vel',
                         messageType: 'geometry_msgs/Twist'
                     })
