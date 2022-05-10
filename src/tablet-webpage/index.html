@@ -219,9 +219,6 @@
 
             constructor(stickID, maxDistance, deadzone) {
 
-                let ros = new ROSLIB.Ros({
-                        url: 'ws://127.20.8.6:9090',
-                })
                 this.id = stickID;
                 let stick = document.getElementById(stickID);
 
@@ -237,21 +234,7 @@
                 let self = this;
 
 
-                function joyPublish(xval, yval) {
-                   
-                   let topic = new ROSLIB.Topic({
-                       ros: ros,
-                       name: 'cmd_vel',
-                       messageType: 'geometry_msgs/Twist'
-                   })
-                   let message = new ROSLIB.Message({
-                       linear: { x: xval, y: 0, z: 0 },
-                       angular: { x: 0, y: yval, z: 0 }
-                   })
-                   // debugger
-                   console.log(message)
-                   topic.publish(message)
-               }
+                
 
                 function handleDown(event) {
                     self.active = true;
@@ -271,10 +254,10 @@
                     if (event.changedTouches)
                         self.touchId = event.changedTouches[0].identifier;
 
-                    while(self.active)
-                    {
-                        joyPublish(self.value.x, self.value.y)
-                    }
+                    // while(self.active)
+                    // {
+                    //     joyPublish(self.value.x, self.value.y)
+                    // }
                 }
 
                 function handleMove(event) {
@@ -344,9 +327,29 @@
         }
 
         let joystick1 = new JoystickController("stick", 64, 8);
+        let ros = new ROSLIB.Ros({
+                        url: 'ws://127.20.8.6:9090',
+                })
+
+        function joyPublish(xval, yval) {
+                   
+                   let topic = new ROSLIB.Topic({
+                       ros: ros,
+                       name: 'cmd_vel',
+                       messageType: 'geometry_msgs/Twist'
+                   })
+                   let message = new ROSLIB.Message({
+                       linear: { x: xval, y: 0, z: 0 },
+                       angular: { x: 0, y: yval, z: 0 }
+                   })
+                   // debugger
+                   console.log(message)
+                   topic.publish(message)
+               }
 
         function update() {
             document.getElementById("status").innerText = "Joystick 1: " + JSON.stringify(joystick1.value);
+            joyPublish(joystick1.value.x, joystick1.value.y)
         }
 
         function loop() {
