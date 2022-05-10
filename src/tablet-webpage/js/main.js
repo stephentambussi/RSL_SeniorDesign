@@ -115,6 +115,7 @@ var app = new Vue({
     },
     //activate manual mode
     manualActivate: function () {
+      document.getElementById('frame').contentWindow.location.reload();
       let topic = new ROSLIB.Topic({
         ros: this.ros,
         name: "/start_mode",
@@ -139,6 +140,7 @@ var app = new Vue({
     },
     //activate autonomous mode
     autoActivate: function () {
+      document.getElementById('frame').contentWindow.location.reload();
       this.autoActive = true
       let topic = new ROSLIB.Topic({
         ros: this.ros,
@@ -163,6 +165,7 @@ var app = new Vue({
     },
     //activate follow mode
     followActivate: function () {
+      document.getElementById('frame').contentWindow.location.reload();
       this.followActive = true
       let topic = new ROSLIB.Topic({
         ros: this.ros,

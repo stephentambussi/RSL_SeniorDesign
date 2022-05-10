@@ -174,6 +174,7 @@
                 <div class="col-md-4">
                     <div class="card">
                         <iframe title="Camera feed"
+                            id="frame"
                             src="http://192.168.0.102:8080/stream_viewer?topic=/zed2i/zed_node/rgb/image_rect_color"
                             height=500 width=660></iframe>
                     </div>
@@ -197,6 +198,7 @@
                 <div class="col-md-4">
                     <div class="card">
                         <iframe title="Camera feed"
+                            id="frame"
                             src="http://192.168.0.102:8080/stream_viewer?topic=/zed2i/zed_node/rgb/image_rect_color"
                             height=500 width=660></iframe>
                     </div>
@@ -234,6 +236,23 @@
 
                 let self = this;
 
+
+                function joyPublish(xval, yval) {
+                   
+                   let topic = new ROSLIB.Topic({
+                       ros: ros,
+                       name: 'cmd_vel',
+                       messageType: 'geometry_msgs/Twist'
+                   })
+                   let message = new ROSLIB.Message({
+                       linear: { x: xval, y: 0, z: 0 },
+                       angular: { x: 0, y: yval, z: 0 }
+                   })
+                   // debugger
+                   console.log(message)
+                   topic.publish(message)
+               }
+
                 function handleDown(event) {
                     self.active = true;
 
@@ -251,24 +270,11 @@
                     // if this is a touch event, keep track of which one
                     if (event.changedTouches)
                         self.touchId = event.changedTouches[0].identifier;
-                }
 
-
-
-                function joyPublish(xval, yval) {
-                   
-                    let topic = new ROSLIB.Topic({
-                        ros: ros,
-                        name: 'cmd_vel',
-                        messageType: 'geometry_msgs/Twist'
-                    })
-                    let message = new ROSLIB.Message({
-                        linear: { x: xval, y: 0, z: 0 },
-                        angular: { x: 0, y: yval, z: 0 }
-                    })
-                    // debugger
-                    console.log(message)
-                    topic.publish(message)
+                    while(self.active)
+                    {
+                        joyPublish(self.value.x, self.value.y)
+                    }
                 }
 
                 function handleMove(event) {
@@ -307,10 +313,8 @@
                     const yPercent = parseFloat((yPosition2 / maxDistance).toFixed(3));
 
                     self.value = { x: xPercent, y: yPercent };
-
-                    joyPublish(xPercent, yPercent)
-
-
+                    
+                
                     console.log(self.value)
                 }
 
