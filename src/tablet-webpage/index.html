@@ -328,7 +328,7 @@
 
         let joystick1 = new JoystickController("stick", 64, 8);
         let ros = new ROSLIB.Ros({
-                        url: 'ws://127.20.8.6:9090',
+                        url: 'ws://192.168.0.102:9090',
                 })
 
         function joyPublish(xval, yval) {
@@ -339,8 +339,8 @@
                        messageType: 'geometry_msgs/Twist'
                    })
                    let message = new ROSLIB.Message({
-                       linear: { x: xval, y: 0, z: 0 },
-                       angular: { x: 0, y: yval, z: 0 }
+                       linear: { x: -yval, y: 0, z: 0 },
+                       angular: { x: 0, y: 0, z: -xval }
                    })
                    // debugger
                    console.log(message)

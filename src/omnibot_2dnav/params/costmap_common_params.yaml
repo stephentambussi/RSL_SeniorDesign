@@ -7,9 +7,9 @@ footprint: [[0.305, 0.305], [-0.305, 0.305], [-0.305, -0.305], [0.305, -0.305]]
 
 #map_topic: /map
 subscribe_to_updates: true
-update_frequency: 15.0
-publish_frequency: 15.0
-transform_tolerance: 0.5
+update_frequency: 20.0
+publish_frequency: 20.0
+transform_tolerance: 1.0
 
 #plugins:
   #- {name: static_layer, type: "costmap_2d::StaticLayer"}

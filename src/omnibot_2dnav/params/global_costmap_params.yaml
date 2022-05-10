@@ -5,8 +5,8 @@ global_costmap:
   #This is a test
   global_frame: /robot_pose_ekf/odom_combined
   robot_base_frame: /base_footprint #coordinate frame for the base of the robot
-  update_frequency: 15.0 #Hz -- frequency at which update loop will run
-  publish_frequency: 15.0
+  update_frequency: 20.0 #Hz -- frequency at which update loop will run
+  publish_frequency: 20.0
   resolution: 0.05
   static_map: false #determines whether costmap should initialize itself based on preexisting map
   rolling_window: true #whether costmap will remain centered around robot as it moves through world
