@@ -7,8 +7,6 @@ import roslaunch
 active_mode = 5 #initialize to 5 which is not any valid mode
 
 def mode_callback(msg):
-    #TODO: see if you need to add functionality where previous node is shutdown specifically when mode switches
-    #or if you can just do launch.shutdown() at the beginning of each mode
     global active_mode
 
     current_mode = msg.data
@@ -41,33 +39,33 @@ def start():
     while not rospy.is_shutdown():
         if running_mode == 0:
             if active_mode == 0: #manual mode
-                #launch = roslaunch.parent.ROSLaunchParent(uuid, ["/home/central-station/senior_design_ws/src/motion_control/launch/manual_control.launch"])
-                #launch.start()
+                launch = roslaunch.parent.ROSLaunchParent(uuid, ["/home/central-station/senior_design_ws/src/motion_control/launch/manual_control.launch"])
+                launch.start()
                 rospy.loginfo("Started Manual Mode")
                 print("manual mode test")
                 running_mode = 1
             elif active_mode == 1: #auto mode
-                #launch = roslaunch.parent.ROSLaunchParent(uuid, ["/home/central-station/senior_design_ws/src/omnibot_2dnav/launch/omnibot.launch"])
-                #launch.start()
+                launch = roslaunch.parent.ROSLaunchParent(uuid, ["/home/central-station/senior_design_ws/src/omnibot_2dnav/launch/omnibot.launch"])
+                launch.start()
                 rospy.loginfo("Started Auto Mode")
                 print("auto mode test")
                 running_mode = 1
             elif active_mode == 2: #follow mode
-                #launch = roslaunch.parent.ROSLaunchParent(uuid, ["/home/central-station/senior_design_ws/src/navigator/launch/follow_me.launch"])
-                #launch.start()
+                launch = roslaunch.parent.ROSLaunchParent(uuid, ["/home/central-station/senior_design_ws/src/navigator/launch/follow_me.launch"])
+                launch.start()
                 rospy.loginfo("Started Follow Mode")
                 print("follow mode test")
                 running_mode = 1
         if running_mode == 1 and active_mode == -1: #shutdown currently running mode
             try:
-                #launch.shutdown()
+                launch.shutdown()
                 print("mode shutdown test")
                 running_mode = 0
             except:
                 print("There is not a mode active")
             #Delete this else if it becomes unnecessary
             else:
-                #launch.shutdown() #for redundancy
+                launch.shutdown() #for redundancy
                 print("mode shutdown test")
                 running_mode = 0
 

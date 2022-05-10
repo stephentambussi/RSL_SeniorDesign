@@ -84,16 +84,17 @@ void objectListCallback(const zed_interfaces::ObjectsStamped::ConstPtr& msg)
       }
       if(abs(msg->objects[i].position[1]) > linear_ythreshold)
       {
+        if(msg->objects[i].position[1] < 0)
+        {
+          angular_z = -0.3; //rotate robot right
+        }
+        else
+        {
+          angular_z = 0.3; //rotate robot left
+        }
+        /* No strafing for now since it is difficult to work with
         if(msg->objects[i].position[0] <= rotate_xthreshold) //rotate
         {
-          if(msg->objects[i].position[1] < 0)
-          {
-            angular_z = -0.3; //rotate robot right
-          }
-          else
-          {
-            angular_z = 0.3; //rotate robot left
-          }
         }
         else //strafe
         {
@@ -105,7 +106,8 @@ void objectListCallback(const zed_interfaces::ObjectsStamped::ConstPtr& msg)
           {
             linear_y = 0.3; //strafe robot left
           }
-        } 
+        }
+        */
       }
       if(abs(msg->objects[i].position[1]) <= linear_ythreshold)
       {
