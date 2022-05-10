@@ -39,7 +39,7 @@
     </style>
 </head>
 
-<body onload="setupCamera()">
+<body>
     <div id="app" class="container">
         <div class="jumbotron text-center">
             <h1>ARC</h1>
@@ -111,14 +111,16 @@
                 </div>
                 <div class="col-md-4">
                     <div class="card">
-                        <div class="card-body">
+                        <!-- <div class="card-body">
                             <h2 class="text-center">Joystick values</h2>
                             <hr />
                             <p>Vertical: {{ joystick.vertical.toFixed(3) }}</p>
                             <br />
                             <p>Horizontal: {{ joystick.horizontal.toFixed(3) }}</p>
+                        </div> -->
+                        <div id="status">
+                            Joystick
                         </div>
-                        <div id="divCamera"></div>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -186,7 +188,7 @@
             // deadzone: joystick must move at least this amount from origin to register value change
             constructor(stickID, maxDistance, deadzone) {
 
-                let ros = new ROSLIB.Ros({
+                this.ros = new ROSLIB.Ros({
                         url: 'ws://127.20.8.6:9090',
                     })
 
@@ -276,9 +278,11 @@
                     const xPercent = parseFloat((xPosition2 / maxDistance).toFixed(4));
                     const yPercent = parseFloat((yPosition2 / maxDistance).toFixed(4));
 
+                    self.value = { x: xPercent, y: yPercent };
+
                     joyPublish(xPercent, yPercent)
 
-                    self.value = { x: xPercent, y: yPercent };
+                    
                     console.log(self.value)
                 }
 
@@ -298,22 +302,6 @@
                     self.active = false;
                 }
 
-        // function joyPublish() {
-            
-        //     let topic = new ROSLIB.Topic({
-        //         ros: this.ros,
-        //         name: 'cmd_vel',
-        //         messageType: 'geometry_msgs/Twist'
-        //     })
-        //     let message = new ROSLIB.Message({
-        //         linear: { x: this.value.x, y: 0, z: 0 },
-        //         angular: { x: 0, y: this.value.y, z: 0 }
-        //     })
-        //     debugger
-        //     //console.log(message)
-        //     topic.publish(message)
-        // }
-
                 stick.addEventListener('mousedown', handleDown);
                 stick.addEventListener('touchstart', handleDown);
                 document.addEventListener('mousemove', handleMove, { passive: false });
@@ -326,10 +314,8 @@
         let joystick1 = new JoystickController("stick", 64, 8);
 
         function update() {
-            document.getElementById("status1").innerText = "Joystick 1: " + JSON.stringify(joystick1.value);
+            document.getElementById("status").innerText = "Joystick 1: " + JSON.stringify(joystick1.value);
         }
-
-
 
         function loop() {
             requestAnimationFrame(loop);
