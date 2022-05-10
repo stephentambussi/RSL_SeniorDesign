@@ -120,7 +120,7 @@ var app = new Vue({
         name: "/start_mode",
         messageType: "std_msgs/Int16",
       });
-      let message = new ROSLIB.Message(0);
+      let message = new ROSLIB.Message({data: 0});
       console.log("publishing manual active");
       this.manualActive = true;
       topic.publish(message);
@@ -133,8 +133,9 @@ var app = new Vue({
         name: "/start_mode",
         messageType: "std_msgs/Int16",
       });
-      let message = new ROSLIB.Message(-1)
-      topic.publish(message)
+      let message = new ROSLIB.Message({data: -1});
+      topic.publish(message);
+      console.log(message)
     },
     //activate autonomous mode
     autoActivate: function () {
@@ -144,7 +145,7 @@ var app = new Vue({
         name: "/start_mode",
         messageType: "std_msgs/Int16",
       });
-      let message = new ROSLIB.Message(1);
+      let message = new ROSLIB.Message({data: 1});
       console.log("publishing auto active");
       topic.publish(message);
       console.log(message)
@@ -156,8 +157,9 @@ var app = new Vue({
         name: "/start_mode",
         messageType: "std_msgs/Int16",
       });
-      let message = new ROSLIB.Message(-1)
-      topic.publish(message)
+      let message = new ROSLIB.Message({data: -1});
+      topic.publish(message);
+      console.log(message)
     },
     //activate follow mode
     followActivate: function () {
@@ -167,9 +169,10 @@ var app = new Vue({
         name: "/start_mode",
         messageType: "std_msgs/Int16",
       });
-      let message = new ROSLIB.Message(2);
+      let message = new ROSLIB.Message({data: 2});
       console.log("publishing follow active");
       topic.publish(message);
+      console.log(message)
     },
     deactivateFollow: function() {
       this.followActive = false;
@@ -178,9 +181,9 @@ var app = new Vue({
         name: "/start_mode",
         messageType: "std_msgs/Int16",
       });
-      let message = new ROSLIB.Message(-1)
-      topic.publish(message)
-
+      let message = new ROSLIB.Message({data: -1});
+      topic.publish(message);
+      console.log(message)
     },
     joyPublish: function () {
       let topic = new ROSLIB.Topic({
@@ -192,9 +195,9 @@ var app = new Vue({
         linear: { x: this.joystick.vertical, y: 0, z: 0 },
         angular: { x: 0, y: 0, z: this.joystick.horizontal },
       });
-      console.log("publish joy");
+      //console.log("publish joy");
       topic.publish(message);
-      console.log(message)
+      //console.log(message)
     },
     startDrag() {
       this.dragging = true;

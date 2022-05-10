@@ -137,7 +137,7 @@
                         <!-- <div class="card-body"> -->
                         <h2 class="text-center">Auto Mode</h2>
                         <hr />
-                        <button @click="deactivateAuto" class="btn btn-danger" v-if="autoActive">Diactivate Auto Mode</button>
+                        <button @click="deactivateAuto" class="btn btn-danger" v-if="autoActive">Deactivate Auto Mode</button>
                         <button @click="autoActivate" class="btn btn-success" v-else>Activate Auto Mode</button>
                         <!-- </div> -->
                         <div class="card-body">
@@ -162,7 +162,7 @@
                         <!-- <div class="card-body"> -->
                         <h2 class="text-center">Follow Mode</h2>
                         <hr />
-                        <Button @click="deactivateFollow" class="btn btn-danger" v-if="followActive">Diactivate Follow Mode</Button>
+                        <Button @click="deactivateFollow" class="btn btn-danger" v-if="followActive">Deactivate Follow Mode</Button>
                         <Button @click="followActivate" class="btn btn-success" v-else>Activate Follow Mode</Button>
                         <!-- </div> -->
                     </div>
@@ -291,7 +291,7 @@
                 angular: { x: 0, y: this.value.y, z: 0 }
             })
             debugger
-            console.log(message)
+            //console.log(message)
             topic.publish(message)
         }
 
@@ -313,7 +313,7 @@
         function loop() {
             requestAnimationFrame(loop);
             //update();
-            joyPublish();
+            //joyPublish();
         }
 
         loop();
