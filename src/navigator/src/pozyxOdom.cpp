@@ -21,6 +21,8 @@ void pozyx_callback(const std_msgs::Float32MultiArray& coords)
 
     x = coords.data[0];
     y = coords.data[1];
+    cout << "x: " << x << endl;
+    cout << "y: " << y << endl;
 
     geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(th); //TODO: see if you should change this or not
 
@@ -35,7 +37,8 @@ void pozyx_callback(const std_msgs::Float32MultiArray& coords)
     odom_trans.transform.translation.z = 0.0;
     odom_trans.transform.rotation = odom_quat;
 
-    //send transform -- TEST
+    //send transform
+    //Note: you can enable this if you disable robot_pose_ekf which provides the same transform, but you'll need heading information first
     //odom_broadcaster.sendTransform(odom_trans);
 
     nav_msgs::Odometry odom;

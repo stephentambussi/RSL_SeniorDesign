@@ -51,17 +51,18 @@ def findPozyxValues():
             y_cnt = y_cnt + 1
     if x_cnt == 5:
         x_avg = x_avg / x_cnt #calculate average
-        coords.data[0] = round(x_avg, 3)
+        #TODO: change the round back to 3 decimal places after figuring out pozyx value filtering
+        coords.data[0] = round(x_avg, 1)
         x_avg = 0
         x_cnt = 0
     if y_cnt == 5:
         y_avg = y_avg / y_cnt
-        coords.data[1] = round(y_avg, 3)
+        coords.data[1] = round(y_avg, 1)
         y_avg = 0
         y_cnt = 0
 
     if pub_cnt == 5: #this is to prevent repeat values from being published
-        #print(coords.data)
+        print(coords.data)
         pub.publish(coords)
         pub_cnt = 0
     pub_cnt = pub_cnt + 1
