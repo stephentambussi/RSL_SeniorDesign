@@ -7,12 +7,10 @@ import roslaunch
 active_mode = 5 #initialize to 5 which is not any valid mode
 
 def mode_callback(msg):
-    #TODO: see if you need to add functionality where previous node is shutdown specifically when mode switches
-    #or if you can just do launch.shutdown() at the beginning of each mode
     global active_mode
 
     current_mode = msg.data
-    #print(current_mode)
+    print(current_mode)
 
     if current_mode == 0: #manual mode
         active_mode = 0 
@@ -58,14 +56,17 @@ def start():
                 rospy.loginfo("Started Follow Mode")
                 print("follow mode test")
                 running_mode = 1
-        elif running_mode == 1 and active_mode == -1: #shutdown currently running mode
+        if running_mode == 1 and active_mode == -1: #shutdown currently running mode
             try:
                 launch.shutdown()
+                print("mode shutdown test")
                 running_mode = 0
             except:
                 print("There is not a mode active")
+            #Delete this else if it becomes unnecessary
             else:
                 launch.shutdown() #for redundancy
+                print("mode shutdown test")
                 running_mode = 0
 
 if __name__ == "__main__":

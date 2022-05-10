@@ -8,6 +8,7 @@
 #include <zed_interfaces/ObjectsStamped.h>
 
 #include "std_msgs/Float32MultiArray.h"
+#include "std_msgs/Int16.h"
 
 ros::Publisher p; //publisher for linang array
 std_msgs::Float32MultiArray linang;
@@ -23,6 +24,16 @@ int init_tracking_flag = 0;
 int timer_called_flag = 0;
 auto start = std::chrono::high_resolution_clock::now(); //timer check
 auto finish = std::chrono::high_resolution_clock::now();
+
+int collision_flag = 0;
+
+void collisionCallback(const std_msgs::Int16& signal)
+{
+  if(signal.data == 616)
+  {
+    collision_flag = 1; //collision detected
+  }
+}
 
 /**
  * Subscriber callbacks. The argument of the callback is a constant pointer to the received message
@@ -70,7 +81,8 @@ void objectListCallback(const zed_interfaces::ObjectsStamped::ConstPtr& msg)
       max_confid = msg->objects[i].confidence;
       max_confid_id = msg->objects[i].label_id;
     }
-    if(msg->objects[i].label_id == tracking_id && static_cast<int>(msg->objects[i].tracking_state) == 1) //if object is tracked one and actively being tracked
+    if(msg->objects[i].label_id == tracking_id && static_cast<int>(msg->objects[i].tracking_state) == 1
+     && collision_flag == 0) //if object is tracked one and actively being tracked
     {
       linang.data.clear();
       ROS_INFO_STREAM("Tracking ID: " << tracking_id);
@@ -84,28 +96,14 @@ void objectListCallback(const zed_interfaces::ObjectsStamped::ConstPtr& msg)
       }
       if(abs(msg->objects[i].position[1]) > linear_ythreshold)
       {
-        if(msg->objects[i].position[0] <= rotate_xthreshold) //rotate
+        if(msg->objects[i].position[1] < 0)
         {
-          if(msg->objects[i].position[1] < 0)
-          {
-            angular_z = -0.3; //rotate robot right
-          }
-          else
-          {
-            angular_z = 0.3; //rotate robot left
-          }
+          angular_z = -0.3; //rotate robot right
         }
-        else //strafe
+        else
         {
-          if(msg->objects[i].position[1] < 0)
-          {
-            linear_y = -0.3; //strafe robot right
-          }
-          else
-          {
-            linear_y = 0.3; //strafe robot left
-          }
-        } 
+          angular_z = 0.3; //rotate robot left
+        }
       }
       if(abs(msg->objects[i].position[1]) <= linear_ythreshold)
       {
@@ -120,6 +118,16 @@ void objectListCallback(const zed_interfaces::ObjectsStamped::ConstPtr& msg)
       flag = 1;
       break;
     }
+  }
+  if(collision_flag == 1) //Completely stop robot from moving on collision detection
+  {
+    linear_x = 0;
+    angular_z = 0;
+    linang.data.push_back(linear_x);
+    linang.data.push_back(linear_y);
+    linang.data.push_back(angular_z);
+
+    p.publish(linang);
   }
   if(flag == 0) //if tracked object not detected, start change object timer
   {
@@ -184,6 +192,7 @@ int main(int argc, char** argv)
    */
   p = n.advertise<std_msgs::Float32MultiArray>("zed_vel1", 10);
   ros::Subscriber subObjList = n.subscribe("objects", 10, objectListCallback);
+  ros::Subscriber subCollSignal = n.subscribe("collisionSignal", 10, collisionCallback);
   /**
    * ros::spin() will enter a loop, pumping callbacks.  With this version, all
    * callbacks will be called from within this thread (the main one).  ros::spin()
