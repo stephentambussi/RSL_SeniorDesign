@@ -5,6 +5,7 @@
     <script type="text/javascript" src="js/roslib.min.js"></script>
     <script src="js/vue.js"></script>
     <script type="text/javascript" src="js/mjpegcanvas.js"></script>
+    <!-- <link rel="stylesheet" type="text/css" href="css/style.css"> -->
 
 
     <style type="text/css">
@@ -97,23 +98,14 @@
                             <!-- <div id="dragstartzone"  @touchstart="startDrag" @touchmove="doDrag" @mousedown="startDrag" @mousemove="doDrag" @mouseup="stopDrag">
                             </div>
                             <div id="dragCircle" :style="dragCircleStyle"></div> -->
-                            <div
-                                style="border: 1px solid blue; width: 128px; ">
+                            <div style="border: 1px solid blue; width: 128px; ">
                                 <img src="images/joystick-base.png" />
                                 <div id="stick" style="position: absolute; left:53px; top:208px">
                                     <img src="images/joystick-blue.png" />
                                 </div>
                             </div>
+                            
                         </div>
-                        <!-- <div class="card-body text-center">
-                            <div
-                                style="border: 1px solid blue; width: 128px; position: absolute; left:210px; top:150px;">
-                                <img src="images/joystick-base.png" />
-                                <div id="stick" style="position: absolute; left:32px; top:32px;">
-                                    <img src="images/joystick-blue.png" />
-                                </div>
-                            </div>
-                        </div> -->
                     </div>
                     <button @click="stopDrag" class="btn btn-danger">Stop joystick</button>
                 </div>
@@ -226,6 +218,24 @@
                         self.touchId = event.changedTouches[0].identifier;
                 }
 
+                function joyPublish(xval, yval) {
+                    let ros = new ROSLIB.Ros({
+                        url: 'ws://127.20.8.6:9090',
+                    })
+                    let topic = new ROSLIB.Topic({
+                        ros: this.ros,
+                        name: 'cmd_vel',
+                        messageType: 'geometry_msgs/Twist'
+                    })
+                    let message = new ROSLIB.Message({
+                        linear: { x: xval, y: 0, z: 0 },
+                        angular: { x: 0, y: yval, z: 0 }
+                    })
+                    // debugger
+                    console.log(message)
+                    topic.publish(message)
+                }
+
                 function handleMove(event) {
                     if (!self.active) return;
 
@@ -261,7 +271,7 @@
                     const xPercent = parseFloat((xPosition2 / maxDistance).toFixed(4));
                     const yPercent = parseFloat((yPosition2 / maxDistance).toFixed(4));
 
-
+                    joyPublish(xPercent, yPercent)
 
                     self.value = { x: xPercent, y: yPercent };
                 }
@@ -297,29 +307,11 @@
             document.getElementById("status1").innerText = "Joystick 1: " + JSON.stringify(joystick1.value);
         }
 
-        function joyPublish() {
-            let ros = new ROSLIB.Ros({
-                url: 'ws://localhost:9090'
-            })
-            let topic = new ROSLIB.Topic({
-                ros: this.ros,
-                name: 'cmd_vel',
-                messageType: 'geometry_msgs/Twist'
-            })
-            let message = new ROSLIB.Message({
-                linear: { x: joystick1.value.x, y: 0, z: 0 },
-                angular: { x: 0, y: joystick1.value.y, z: 0 }
-            })
-            // debugger
-            console.log(message)
-            topic.publish(message)
-            console.log(message)
-        }
+
 
         function loop() {
             requestAnimationFrame(loop);
-            // update();
-            joyPublish();
+            update();
         }
 
         loop();
