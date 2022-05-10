@@ -87,37 +87,26 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="card">
-                        <!-- <div class="card-body"> -->
                         <h2 class="text-center">Manual Mode</h2>
-                        <Button @click="deactivateManual" class="btn btn-danger" v-if="manualActive">Deactivate Manual Mode</Button>
+                        <Button @click="deactivateManual" class="btn btn-danger" v-if="manualActive">Deactivate Manual
+                            Mode</Button>
                         <Button @click="manualActivate" class="btn btn-success" v-else>Activate Manual Mode</Button>
-                        <!-- </div> -->
                         <div class="card-body text-center">
                             <h2 class="text-center">Joystick</h2>
                             <hr>
-                            <!-- <div id="dragstartzone"  @touchstart="startDrag" @touchmove="doDrag" @mousedown="startDrag" @mousemove="doDrag" @mouseup="stopDrag">
-                            </div>
-                            <div id="dragCircle" :style="dragCircleStyle"></div> -->
                             <div style="border: 1px solid blue; width: 128px; ">
                                 <img src="images/joystick-base.png" />
                                 <div id="stick" style="position: absolute; left:53px; top:208px">
                                     <img src="images/joystick-blue.png" />
                                 </div>
                             </div>
-                            
+
                         </div>
                     </div>
                     <button @click="stopDrag" class="btn btn-danger">Stop joystick</button>
                 </div>
                 <div class="col-md-4">
                     <div class="card">
-                        <!-- <div class="card-body">
-                            <h2 class="text-center">Joystick values</h2>
-                            <hr />
-                            <p>Vertical: {{ joystick.vertical.toFixed(3) }}</p>
-                            <br />
-                            <p>Horizontal: {{ joystick.horizontal.toFixed(3) }}</p>
-                        </div> -->
                         <div id="status">
                             Joystick
                         </div>
@@ -125,12 +114,45 @@
                 </div>
                 <div class="col-md-4">
                     <div class="card">
-                        <iframe id="frame" src="http://192.168.0.102:8080/stream_viewer?topic=/zed2i/zed_node/rgb/image_rect_color"
+                        <iframe id="frame"
+                            src="http://192.168.0.102:8080/stream_viewer?topic=/zed2i/zed_node/rgb/image_rect_color"
                             height=500 width=660></iframe>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- <div id="manual" class="tabcontent">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h5>Commands</h5>
+                </div>
+    
+                
+                <div class="col-md-12 text-center">
+                    <button @click="forward" :disabled="loading || !connected" class="btn btn-primary">Go forward</button>
+                    <br><br>
+                </div>
+    
+         
+                <div class="col-md-4 text-center">
+                    <button @click="turnLeft" :disabled="loading || !connected" class="btn btn-primary">Turn left</button>
+                </div>
+                <div class="col-md-4 text-center">
+                    <button @click="stop" :disabled="loading || !connected" class="btn btn-danger">Stop</button>
+                    <br><br>
+                </div>
+                <div class="col-md-4 text-center">
+                    <button @click="turnRight" :disabled="loading || !connected" class="btn btn-primary">Turn right</button>
+                </div>
+    
+                
+                <div class="col-md-12 text-center">
+                    <button @click="backward" :disabled="loading || !connected" class="btn btn-primary">Go backward</button>
+                </div>
+            </div> 
+    
+        </div>
+        </div> --->
         <!-- Auto Mode -->
         <div id="auto" class="tabcontent">
             <div class="row">
@@ -139,7 +161,8 @@
                         <!-- <div class="card-body"> -->
                         <h2 class="text-center">Auto Mode</h2>
                         <hr />
-                        <button @click="deactivateAuto" class="btn btn-danger" v-if="autoActive">Deactivate Auto Mode</button>
+                        <button @click="deactivateAuto" class="btn btn-danger" v-if="autoActive">Deactivate Auto
+                            Mode</button>
                         <button @click="autoActivate" class="btn btn-success" v-else>Activate Auto Mode</button>
                         <!-- </div> -->
                         <div class="card-body">
@@ -150,7 +173,8 @@
                 </div>
                 <div class="col-md-4">
                     <div class="card">
-                        <iframe title="Camera feed" src="http://192.168.0.102:8080/stream_viewer?topic=/zed2i/zed_node/rgb/image_rect_color"
+                        <iframe title="Camera feed"
+                            src="http://192.168.0.102:8080/stream_viewer?topic=/zed2i/zed_node/rgb/image_rect_color"
                             height=500 width=660></iframe>
                     </div>
                 </div>
@@ -164,14 +188,16 @@
                         <!-- <div class="card-body"> -->
                         <h2 class="text-center">Follow Mode</h2>
                         <hr />
-                        <Button @click="deactivateFollow" class="btn btn-danger" v-if="followActive">Deactivate Follow Mode</Button>
+                        <Button @click="deactivateFollow" class="btn btn-danger" v-if="followActive">Deactivate Follow
+                            Mode</Button>
                         <Button @click="followActivate" class="btn btn-success" v-else>Activate Follow Mode</Button>
                         <!-- </div> -->
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="card">
-                        <iframe title="Camera feed" src="http://192.168.0.102:8080/stream_viewer?topic=/zed2i/zed_node/rgb/image_rect_color"
+                        <iframe title="Camera feed"
+                            src="http://192.168.0.102:8080/stream_viewer?topic=/zed2i/zed_node/rgb/image_rect_color"
                             height=500 width=660></iframe>
                     </div>
                 </div>
@@ -274,14 +300,14 @@
                     const distance2 = (distance < deadzone) ? 0 : maxDistance / (maxDistance - deadzone) * (distance - deadzone);
                     const xPosition2 = distance2 * Math.cos(angle);
                     const yPosition2 = distance2 * Math.sin(angle);
-                    const xPercent = parseFloat((xPosition2 / maxDistance).toFixed(4));
-                    const yPercent = parseFloat((yPosition2 / maxDistance).toFixed(4));
+                    const xPercent = parseFloat((xPosition2 / maxDistance).toFixed(3));
+                    const yPercent = parseFloat((yPosition2 / maxDistance).toFixed(3));
 
                     self.value = { x: xPercent, y: yPercent };
 
                     joyPublish(xPercent, yPercent)
 
-                    
+
                     console.log(self.value)
                 }
 
