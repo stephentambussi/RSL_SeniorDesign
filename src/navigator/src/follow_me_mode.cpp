@@ -192,7 +192,7 @@ int main(int argc, char** argv)
    */
   p = n.advertise<std_msgs::Float32MultiArray>("zed_vel1", 10);
   ros::Subscriber subObjList = n.subscribe("objects", 10, objectListCallback);
-  ros::Subscriber subCollSignal = n.subscribe("collisionSignal", 10, collisionCallback)
+  ros::Subscriber subCollSignal = n.subscribe("collisionSignal", 10, collisionCallback);
   /**
    * ros::spin() will enter a loop, pumping callbacks.  With this version, all
    * callbacks will be called from within this thread (the main one).  ros::spin()
