@@ -1,6 +1,7 @@
 <launch>
   <include file="$(find zed_wrapper)/launch/zed2i.launch"/>
   <node pkg="navigator" name="follow_me" type="follow_me_node" args="objects:=/zed2i/zed_node/obj_det/objects"/>
+  <node pkg="navigator" name="collisionDetector" type="collisionDetector.py" output="screen"/>
   <node name="driver_node" pkg="motion_control" type="driver_auto.py" />
   <node name="roboteq1_node" pkg="motion_control" type="motor_command1.py" />
   <node name="roboteq2_node" pkg="motion_control" type="motor_command2.py" />

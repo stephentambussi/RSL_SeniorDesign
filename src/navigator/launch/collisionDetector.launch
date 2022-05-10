@@ -1,0 +1,4 @@
+<launch>
+
+  <node pkg="navigator" name="collisionDetector" type="collisionDetector.py" output="screen"/>
+</launch>
