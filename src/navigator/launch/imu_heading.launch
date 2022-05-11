@@ -1,0 +1,5 @@
+<launch>
+
+    <include file="$(find zed_wrapper)/launch/zed2i.launch"/>
+    <node pkg="navigator" name="imu_heading" type="imu_heading" args="heading:=/zed2i/zed_node/imu/data" output="screen"/>
+</launch>
