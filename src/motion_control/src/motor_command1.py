@@ -71,7 +71,7 @@ def command_motors():
 	#rospy.spin()
 
 	while not rospy.is_shutdown():
-		rpms_query()
+		#rpms_query()
 		rate.sleep()
 
 if __name__ == '__main__':
