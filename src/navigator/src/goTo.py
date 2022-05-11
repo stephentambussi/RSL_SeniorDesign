@@ -63,7 +63,39 @@ def start():
             print(init_str)
             do_goto(move_cmd)
             go_where = 500 #reset go_where so function does not keep running
-        
+        elif go_where == 11: #go backward by a meter
+            move_cmd = Twist()
+            move_cmd.linear.x = -0.2 #m/s
+            move_cmd.linear.y = 0.0
+            move_cmd.angular.z = 0.0 #rad/s
+            init_x = x_coord
+            init_y = y_coord
+            init_str = "Initial Position: x = " + str(init_x) + " y = " + str(init_y)
+            print(init_str)
+            do_goto(move_cmd)
+            go_where = 500 #reset go_where so function does not keep running
+        elif go_where == 12: #go left by a meter
+            move_cmd = Twist()
+            move_cmd.linear.x = 0.0 #m/s
+            move_cmd.linear.y = -0.2
+            move_cmd.angular.z = 0.0 #rad/s
+            init_x = x_coord
+            init_y = y_coord
+            init_str = "Initial Position: x = " + str(init_x) + " y = " + str(init_y)
+            print(init_str)
+            do_goto(move_cmd)
+            go_where = 500 #reset go_where so function does not keep running
+        elif go_where == 13: #go right by a meter
+            move_cmd = Twist()
+            move_cmd.linear.x = 0.0 #m/s
+            move_cmd.linear.y = 0.2
+            move_cmd.angular.z = 0.0 #rad/s
+            init_x = x_coord
+            init_y = y_coord
+            init_str = "Initial Position: x = " + str(init_x) + " y = " + str(init_y)
+            print(init_str)
+            do_goto(move_cmd)
+            go_where = 500 #reset go_where so function does not keep running
         rate.sleep()
 
 if __name__ == "__main__":
