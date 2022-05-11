@@ -1,0 +1,18 @@
+<launch>
+    <include file="$(find zed_wrapper)/launch/zed2i.launch"/>
+
+    <!-- Pozyx serial subscriber that parses the data -->
+    <node name="pozyx_serial" pkg="navigator" type="pozyxPositioning.py" />
+
+    <node name="goto_node" pkg="navigator" type="goTo.py" />
+
+    <!-- Driver Node -->  
+    <!-- Subscribe: /cmd_vel -->
+    <!-- Publish: /command_du_one -->
+    <node pkg="motion_control" name="driver" type="driver.py" output="screen"/>	
+
+    <!-- Motor Encoder Nodes -->  
+    <!-- Subscribe: /command_du_one -->
+    <node name="roboteq1_node" pkg="motion_control" type="motor_command1.py" />
+    <node name="roboteq2_node" pkg="motion_control" type="motor_command2.py" />
+</launch>

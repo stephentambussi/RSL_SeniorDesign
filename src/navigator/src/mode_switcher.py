@@ -45,7 +45,7 @@ def start():
                 print("manual mode test")
                 running_mode = 1
             elif active_mode == 1: #auto mode
-                launch = roslaunch.parent.ROSLaunchParent(uuid, ["/home/central-station/senior_design_ws/src/omnibot_2dnav/launch/omnibot.launch"])
+                launch = roslaunch.parent.ROSLaunchParent(uuid, ["/home/central-station/senior_design_ws/src/navigator/launch/go_to.launch"])
                 launch.start()
                 rospy.loginfo("Started Auto Mode")
                 print("auto mode test")
