@@ -2,6 +2,7 @@
 import rospy
 from std_msgs.msg import Int16, Float32MultiArray
 from geometry_msgs.msg import Twist
+import time
 
 go_where = 500 #initialize to an invalid value
 x_coord = -1000.0 #initialize to an invalid value
@@ -36,11 +37,13 @@ def do_goto(goal):
     move_cmd.linear.y = 0.0
     move_cmd.angular.z = 0.0 #rad/s
     print(goal)
-    while x_coord <= goal:
+    elapsed = 0 #elapsed time
+    start = time.time()
+    while elapsed < 5:
         pub.publish(move_cmd)
         print(x_coord)
-        if x_coord > goal:
-            break
+        end = time.time()
+        elapsed = end - start
 
 def start():
     rospy.init_node("goTo")
@@ -56,6 +59,8 @@ def start():
     rospy.Subscriber("coordinates", Float32MultiArray, pozyx_callback)
     rate = rospy.Rate(5) #hz
     while not rospy.is_shutdown():
+        #start = time.time()
+        #print(start)
         if go_where == 10: #go forward by a meter
             init_x = x_coord
             init_y = y_coord
