@@ -77,7 +77,7 @@
         <!-- Tab Links -->
         <div class="tabs text-center">
             <button class="tablinks" @click="openTab(event, 'manual')">Manual</button>
-            <button class="tablinks" @click="openTab(event, 'auto')">Auto</button>
+            <button class="tablinks" @click="openTab(event, 'auto')">Go To</button>
             <button class="tablinks" @click="openTab(event, 'follow')">Follow</button>
         </div>
 
@@ -159,11 +159,11 @@
                 <div class="col-md-4">
                     <div class="card">
                         <!-- <div class="card-body"> -->
-                        <h2 class="text-center">Auto Mode</h2>
+                        <h2 class="text-center">Go To Mode</h2>
                         <hr />
-                        <button @click="deactivateAuto" class="btn btn-danger" v-if="autoActive">Deactivate Auto
+                        <button @click="deactivateAuto" class="btn btn-danger" v-if="autoActive">Deactivate Go To
                             Mode</button>
-                        <button @click="autoActivate" class="btn btn-success" v-else>Activate Auto Mode</button>
+                        <button @click="autoActivate" class="btn btn-success" v-else>Activate Go To Mode</button>
                         <!-- </div> -->
                         <div class="card-body">
                             <button @click="goForOne">Go Forward by 1 Meter (X)</button>

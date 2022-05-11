@@ -15,6 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   zed_interfaces
+  sensor_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -136,6 +137,7 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(follow_me_node src/follow_me_mode.cpp)
 add_executable(pozyx_gps src/pozyxOdom.cpp)
+add_executable(imu_heading src/imuHeading.cpp)
 #add_executable(coll_avoid_node src/collisionNav.cpp)
 #add_executable(odom_pub src/Odom2.cpp)
 add_executable(rviz_click_to_2d src/rviz_click_to_2d.cpp)
@@ -143,6 +145,7 @@ add_executable(rviz_click_to_2d src/rviz_click_to_2d.cpp)
 
 target_link_libraries(follow_me_node ${catkin_LIBRARIES})
 target_link_libraries(pozyx_gps ${catkin_LIBRARIES})
+target_link_libraries(imu_heading ${catkin_LIBRARIES})
 #target_link_libraries(coll_avoid_node ${catkin_LIBRARIES})
 #target_link_libraries(odom_pub ${catkin_LIBRARIES})
 target_link_libraries(rviz_click_to_2d ${catkin_LIBRARIES})
@@ -150,6 +153,7 @@ target_link_libraries(rviz_click_to_2d ${catkin_LIBRARIES})
 
 add_dependencies(follow_me_node ${catkin_EXPORTED_TARGETS})
 add_dependencies(pozyx_gps ${catkin_EXPORTED_TARGETS})
+add_dependencies(imu_heading ${catkin_EXPORTED_TARGETS})
 #add_dependencies(coll_avoid_node ${catkin_EXPORTED_TARGETS})
 #add_dependencies(odom_pub ${catkin_EXPORTED_TARGETS})
 add_dependencies(rviz_click_to_2d ${catkin_EXPORTED_TARGETS})
