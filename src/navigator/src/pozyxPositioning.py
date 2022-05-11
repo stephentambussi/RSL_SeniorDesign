@@ -60,7 +60,7 @@ def findPozyxValues():
         y_cnt = 0
 
     if pub_cnt == 5: #this is to prevent repeat values from being published
-        print(coords.data)
+        #print(coords.data)
         pub.publish(coords)
         pub_cnt = 0
     pub_cnt = pub_cnt + 1
