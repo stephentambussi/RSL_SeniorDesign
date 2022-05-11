@@ -23,8 +23,6 @@ x_cnt = 0
 y_cnt = 0
 pub_cnt = 0
 
-#TODO: change avg calc to std dev calc to fix pozyx being jumpy
-
 def findPozyxValues():
     data = serial_arduino.read_all()
     data = data.decode()

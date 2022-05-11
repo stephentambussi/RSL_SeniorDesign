@@ -188,6 +188,16 @@ var app = new Vue({
       topic.publish(message);
       console.log(message)
     },
+    goForOne: function() {
+      let topic = new ROSLIB.Topic({
+        ros: this.ros,
+        name: "/go_to",
+        messageType: "std_msgs/Int16",
+      });
+      let message = new ROSLIB.Message({data: 10});
+      topic.publish(message);
+      console.log(message)
+    },
     joyPublish: function () {
       let topic = new ROSLIB.Topic({
         ros: this.ros,

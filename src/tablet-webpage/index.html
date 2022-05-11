@@ -166,8 +166,10 @@
                         <button @click="autoActivate" class="btn btn-success" v-else>Activate Auto Mode</button>
                         <!-- </div> -->
                         <div class="card-body">
-                            <button>ET go home</button>
-                            <button>ET go to point</button>
+                            <button @click="goForOne">Go Forward by 1 Meter (X)</button>
+                            <button @click="goBackOne">Go Backward by 1 Meter (X)</button>
+                            <button @click="goLeftOne">Go Left by 1 Meter (Y)</button>
+                            <button @click="goRightOne">Go Right by 1 Meter (Y)</button>
                         </div>
                     </div>
                 </div>
