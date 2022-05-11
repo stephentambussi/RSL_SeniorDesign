@@ -21,12 +21,11 @@ void pozyx_callback(const std_msgs::Float32MultiArray& coords)
 
     x = coords.data[0];
     y = coords.data[1];
-    cout << "x: " << x << endl;
-    cout << "y: " << y << endl;
-
-    geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(th); //TODO: see if you should change this or not
+    //cout << "x: " << x << endl;
+    //cout << "y: " << y << endl;
 
     //publish transform over tf
+    /*
     geometry_msgs::TransformStamped odom_trans;
     odom_trans.header.stamp = current_time;
     odom_trans.header.frame_id = "odom";
@@ -36,6 +35,7 @@ void pozyx_callback(const std_msgs::Float32MultiArray& coords)
     odom_trans.transform.translation.y = y;
     odom_trans.transform.translation.z = 0.0;
     odom_trans.transform.rotation = odom_quat;
+    */
 
     //send transform
     //Note: you can enable this if you disable robot_pose_ekf which provides the same transform, but you'll need heading information first
@@ -49,7 +49,10 @@ void pozyx_callback(const std_msgs::Float32MultiArray& coords)
     odom.pose.pose.position.x = x;
     odom.pose.pose.position.y = y;
     odom.pose.pose.position.z = 0.0;
-    odom.pose.pose.orientation = odom_quat;
+    odom.pose.pose.orientation.x = 1.0;
+    odom.pose.pose.orientation.y = 0.0;
+    odom.pose.pose.orientation.z = 0.0;
+    odom.pose.pose.orientation.w = 0.0;
 
     odom.pose.covariance = {0.01, 0, 0, 0, 0, 0,  // covariance on gps_x
                             0, 0.01, 0, 0, 0, 0,  // covariance on gps_y
@@ -57,6 +60,21 @@ void pozyx_callback(const std_msgs::Float32MultiArray& coords)
                             0, 0, 0, 99999, 0, 0,  // large covariance on rot x
                             0, 0, 0, 0, 99999, 0,  // large covariance on rot y
                             0, 0, 0, 0, 0, 99999};  // large covariance on rot z
+
+    odom.twist.twist.linear.x = 0.0;
+    odom.twist.twist.linear.y = 0.0;
+    odom.twist.twist.linear.z = 0.0;
+    odom.twist.twist.angular.x = 0.0;
+    odom.twist.twist.angular.y = 0.0;
+    odom.twist.twist.angular.z = 0.0;
+    //This is basically telling the nav stack to ignore velocity from pozyx
+    odom.twist.covariance = {99999, 0, 0, 0, 0, 0,  // covariance on lin x
+                            0, 99999, 0, 0, 0, 0,  // covariance on lin y
+                            0, 0, 99999, 0, 0, 0,  // covariance on lin z
+                            0, 0, 0, 99999, 0, 0,  // large covariance on ang x
+                            0, 0, 0, 0, 99999, 0,  // large covariance on ang y
+                            0, 0, 0, 0, 0, 99999};  // large covariance on ang z
+
     odom_pub.publish(odom);
     last_time = current_time;
 }

@@ -7,8 +7,8 @@ footprint: [[0.305, 0.305], [-0.305, 0.305], [-0.305, -0.305], [0.305, -0.305]]
 
 #map_topic: /map
 subscribe_to_updates: true
-update_frequency: 20.0
-publish_frequency: 20.0
+update_frequency: 15.0
+publish_frequency: 15.0
 transform_tolerance: 1.0
 
 #plugins:
@@ -20,19 +20,19 @@ transform_tolerance: 1.0
 #  map_topic: /map
 #  subscribe_to_updates: false
 
-obstacle_layer:
+#obstacle_layer:
     #defines a list of sensors that pass information to the costmap
-    observation_sources: laser_scan_sensor
+    #observation_sources: laser_scan_sensor
     #sensor_frame = name of sensor coordinate frame
     #data_type = depends on which message topic uses
     #topic = name of topic sensor publishes data on
     #marking = whether sensor will be used to add obstacle info to the costmap
     #clearing = whether sensor will be used to clear obstacle info from the costmap
-    laser_scan_sensor: {sensor_frame: laser, data_type: LaserScan, topic: scan, marking: true, clearing: true}
+    #laser_scan_sensor: {sensor_frame: laser, data_type: LaserScan, topic: scan, marking: true, clearing: true}
 
-inflation_layer:
+#inflation_layer:
   #Robot will treat paths that stay this distance or more away from obstacles as having equal obstacle cost
-  inflation_radius: 0.1
+  #inflation_radius: 0.1
 
 
 

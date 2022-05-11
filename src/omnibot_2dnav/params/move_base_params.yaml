@@ -1,6 +1,7 @@
-controller_frequency: 20.0
+controller_frequency: 15.0
 recovery_behavior_enabled: false
 clearing_rotation_allowed: false
 
-base_global_planner: "global_planner/GlobalPlanner"
+#base_global_planner: "global_planner/GlobalPlanner"
+base_global_planner: "carrot_planner/CarrotPlanner"
 base_local_planner: "dwa_local_planner/DWAPlannerROS"

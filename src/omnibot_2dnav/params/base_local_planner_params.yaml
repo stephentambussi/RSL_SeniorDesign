@@ -2,17 +2,17 @@
 
 DWAPlannerROS:
   #define velocity limits of robot
-  max_vel_x: 0.1
-  min_vel_x: 0.05
-  max_vel_y: 0.1
-  min_vel_y: 0.05
-  max_vel_theta: 0.1
-  min_vel_theta: 0.05
+  max_vel_x: 0.25
+  min_vel_x: 0.2
+  max_vel_y: 0.25
+  min_vel_y: 0.2
+  max_vel_theta: 0.25
+  min_vel_theta: 0.2
 
   #define acceleration limits of robot
-  acc_lim_th: 1
-  acc_lim_x: 1
-  acc_lim_y: 1
+  acc_lim_th: 1.5
+  acc_lim_x: 1.5
+  acc_lim_y: 1.5
 
   yaw_goal_tolerance: 0.5
   xy_goal_tolerance: 0.5

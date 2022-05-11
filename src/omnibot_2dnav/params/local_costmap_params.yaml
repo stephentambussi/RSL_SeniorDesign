@@ -3,18 +3,19 @@
 
 local_costmap:
   global_frame: /robot_pose_ekf/odom_combined #what coordinate frame the costmap should run
+  #global_frame: /odom
   robot_base_frame: /base_footprint #coordinate frame for the base of the robot
-  update_frequency: 20.0 #Hz -- frequency at which update loop will run
-  publish_frequency: 20.0 #Hz -- frequency at which costmap will publish visualization info
+  update_frequency: 15.0 #Hz -- frequency at which update loop will run
+  publish_frequency: 15.0 #Hz -- frequency at which costmap will publish visualization info
   static_map: false #determines whether costmap should initialize itself based on preexisting map
   rolling_window: true #whether costmap will remain centered around robot as it moves through world
   width: 5.0 #width of costmap
   height: 5.0 #height of costmap
-  resolution: 0.05 #meters/cell -- should be same resolution as static map (but fine if not)
+  resolution: 0.1 #meters/cell -- should be same resolution as static map (but fine if not)
 
 #plugins:
   #- {name: obstacle_layer, type: "costmap_2d::ObstacleLayer"}
 
-obstacle_layer:
-  observation_sources: laser_scan_sensor
-  laser_scan_sensor: {sensor_frame: laser, data_type: LaserScan, topic: scan, marking: true, clearing: true}
+#obstacle_layer:
+#  observation_sources: laser_scan_sensor
+#  laser_scan_sensor: {sensor_frame: laser, data_type: LaserScan, topic: scan, marking: true, clearing: true}
