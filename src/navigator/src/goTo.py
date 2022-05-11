@@ -27,16 +27,9 @@ def pozyx_callback(float):
     x_coord = round(float.data[0], 2)
     y_coord = round(float.data[1], 2)
 
-def do_goto(goal):
-    #TODO: fix code getting stuck in an infinite loop when driving forward
-    #TODO: implement the rest of the go to buttons
+def do_goto(move_cmd):
     global x_coord
     global y_coord
-    move_cmd = Twist()
-    move_cmd.linear.x = 0.2 #m/s
-    move_cmd.linear.y = 0.0
-    move_cmd.angular.z = 0.0 #rad/s
-    print(goal)
     elapsed = 0 #elapsed time
     start = time.time()
     while elapsed < 5:
@@ -59,15 +52,16 @@ def start():
     rospy.Subscriber("coordinates", Float32MultiArray, pozyx_callback)
     rate = rospy.Rate(5) #hz
     while not rospy.is_shutdown():
-        #start = time.time()
-        #print(start)
         if go_where == 10: #go forward by a meter
+            move_cmd = Twist()
+            move_cmd.linear.x = 0.2 #m/s
+            move_cmd.linear.y = 0.0
+            move_cmd.angular.z = 0.0 #rad/s
             init_x = x_coord
             init_y = y_coord
             init_str = "Initial Position: x = " + str(init_x) + " y = " + str(init_y)
             print(init_str)
-            goal = init_x + 1
-            do_goto(goal)
+            do_goto(move_cmd)
             go_where = 500 #reset go_where so function does not keep running
         
         rate.sleep()
