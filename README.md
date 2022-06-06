@@ -21,7 +21,7 @@ Team Members and Major:
 - Tanner Kaczmarek - COEN
 - Kevin Molumphy - COEN
 
-First Quarter Demo of "Follow the Leader" Mode
+First Quarter Demo of "Follow Me" Mode
 
 ![followtheleader](assets/cobot_followtheleader.gif)
 
